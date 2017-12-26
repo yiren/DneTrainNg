@@ -32,6 +32,9 @@ namespace DneTrainNg.Models
                 .HasKey(t => t.SectionId);
 
             builder.Entity<Section>()
+                .Property(t => t.SectionId).ValueGeneratedOnAdd();
+
+            builder.Entity<Section>()
                    .Property(t => t.SectionId)
                    .ValueGeneratedOnAdd();
 
@@ -47,15 +50,16 @@ namespace DneTrainNg.Models
 
             builder.Entity<Student>()
                    .HasOne(s => s.Section)
-                   .WithOne(t => t.Student)
-                   .HasForeignKey<Section>(t => t.StudentId);
+                   .WithMany(t => t.Students)
+                   .HasForeignKey(t => t.StudentId);
 
             builder.Entity<StudentCourse>()
                 .HasKey(sc => sc.StudentCourseId);
 
             builder.Entity<StudentCourse>()
-                .Property(sc => sc.CourseYear)
-                .IsRequired();
+                .Property(sc => sc.StudentCourseId).ValueGeneratedOnAdd();
+
+            
         }
 
     }
@@ -65,6 +69,8 @@ namespace DneTrainNg.Models
         public void Configure(EntityTypeBuilder<Course> builder)
         {
             builder.HasKey(c => c.CourseId);
+
+            //builder.Property(c => c.CourseId).ValueGeneratedOnAdd();
 
             builder
                 .Property(c => c.CourseName)
@@ -77,10 +83,6 @@ namespace DneTrainNg.Models
             builder
                 .Property(c => c.CourseEndDate)
                 .HasMaxLength(50);
-
-            builder
-                .Property(c => c.CourseYear)
-                .IsRequired();
 
             builder
                 .Property(c => c.TrainHours);
@@ -98,6 +100,8 @@ namespace DneTrainNg.Models
         {
             builder
                 .HasKey(s => s.StudentId);
+
+            builder.Property(s => s.StudentId).ValueGeneratedOnAdd();
 
             builder
                 .Property(s => s.StudentName)

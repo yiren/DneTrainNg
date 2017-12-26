@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DneTrainNg.Data.Repository;
+using DneTrainNg.Data.SeedData;
 using DneTrainNg.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +11,7 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Serialization;
 
 namespace DneTrainNg
 {
@@ -26,12 +29,20 @@ namespace DneTrainNg
         {
             services.AddDbContext<TrainingDbContext>(
                 opt => opt.UseInMemoryDatabase("TrainingDb"));
-            services.AddMvc();
+
+            services.AddScoped<ICourseRepository, CourseRepository>();
+            services.AddMvc()
+                    .AddJsonOptions(opt=>
+                    {
+                        opt.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                        opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, TrainingDbContext context)
         {
+            TrainingSeedData.Initialize(context);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

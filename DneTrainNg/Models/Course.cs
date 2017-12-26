@@ -12,7 +12,7 @@ namespace DneTrainNg.Models
         public short CourseYear { get; set; }
         public string CourseStartDate { get; set; }
         public string CourseEndDate { get; set; }
-        public float TrainHours { get; set; }
+        public double TrainHours { get; set; }
         public List<StudentCourse> StudentCourses { get; set; }
     }
 }

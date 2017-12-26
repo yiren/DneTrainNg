@@ -11,7 +11,6 @@ namespace DneTrainNg.Models
         public string SectionCode { get; set; }
         public string SectionName { get; set; }
 
-        public Guid StudentId { get; set; }
-        public Student Student { get; set; }
+        public List<Student> Students { get; set; }
     }
 }
