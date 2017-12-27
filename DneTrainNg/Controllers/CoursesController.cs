@@ -8,11 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using DneTrainNg.Models;
 using DneTrainNg.Data.Repository;
 using DneTrainNg.Models.ViewModel;
+using Microsoft.AspNetCore.Cors;
 
 namespace DneTrainNg.Controllers
 {
     [Produces("application/json")]
     [Route("api/Courses")]
+    [EnableCors("angular")]
     public class CoursesController : Controller
     {
         private readonly ICourseRepository repo;
@@ -40,8 +42,6 @@ namespace DneTrainNg.Controllers
         [HttpGet("{id}")]
         public Course GetCourseById([FromRoute] Guid id)
         {
-            
-
             return repo.GetCourseDetailById(id);
         }
 
@@ -93,11 +93,11 @@ namespace DneTrainNg.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCourse([FromRoute] Guid id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
+            
             //var course = await _context.Courses.SingleOrDefaultAsync(m => m.CourseId == id);
             //if (course == null)
             //{
@@ -107,7 +107,7 @@ namespace DneTrainNg.Controllers
             //_context.Courses.Remove(course);
             //await _context.SaveChangesAsync();
 
-            return Ok();
+            return Ok(repo.DeleteCourse(id));
         }
 
         private bool CourseExists(Guid id)

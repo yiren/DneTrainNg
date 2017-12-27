@@ -29,7 +29,15 @@ namespace DneTrainNg
         {
             services.AddDbContext<TrainingDbContext>(
                 opt => opt.UseInMemoryDatabase("TrainingDb"));
-
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("angular",
+                    policy=> {
+                        policy.AllowAnyOrigin();
+                        policy.AllowAnyMethod();
+                        policy.AllowAnyHeader();
+                    });
+            });
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddMvc()
                     .AddJsonOptions(opt=>
@@ -55,7 +63,7 @@ namespace DneTrainNg
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
+            app.UseCors("Angular");
             app.UseStaticFiles();
 
             app.UseMvc(routes =>

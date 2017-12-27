@@ -12,7 +12,7 @@ namespace DneTrainNg.Data.Repository
         Task<List<Course>> GetCourseList();
         Course AddCourse(CourseChangeViewModel course);
         Course UpdateCourse(Guid id, CourseChangeViewModel course);
-        Boolean DeleteCourse(int id);
+        Boolean DeleteCourse(Guid id);
         Course GetCourseDetailById(Guid courseId);
     }
 }

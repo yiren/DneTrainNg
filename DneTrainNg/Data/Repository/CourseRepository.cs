@@ -56,11 +56,12 @@ namespace DneTrainNg.Data.Repository
             return db.Courses.Find(record.CourseId);
         }
 
-        public Boolean DeleteCourse(int id)
+        public Boolean DeleteCourse(Guid id)
         {
-            //var course = await db.Courses.FindAsync(id);
-            //db.Courses.Remove(course);
-            return false;
+            var course = db.Courses.Find(id);
+            db.Courses.Remove(course);
+            return db.SaveChanges() != -1 ? true : false;
+            
         }
 
         public Course GetCourseDetailById(Guid courseId)
