@@ -23,7 +23,8 @@ namespace DneTrainNg.Data.Repository
             Guid courseId = Guid.NewGuid();
             foreach(var studentId in course.Students)
             {
-                var student = db.Students.Include(s => s.Section).AsNoTracking().FirstOrDefault(s => s.StudentId == studentId);
+                var student = db.Students.Find(studentId);
+                
                 if (student != null)
                 {
                     StudentCourse studentCourse = new StudentCourse()
@@ -32,8 +33,8 @@ namespace DneTrainNg.Data.Repository
                         //CourseName=course.CourseName,
                         CourseId = courseId,
                         StudentName = student.StudentName,
-                        SectionName = student.Section.SectionName,
-                        SectionCode = student.Section.SectionCode
+                        SectionName = student.SectionName,
+                        SectionCode = student.SectionCode
                         //TrainHours=course.TrainHours
                     };
                     studentCourses.Add(studentCourse);
@@ -48,6 +49,7 @@ namespace DneTrainNg.Data.Repository
                 CourseStartDate=course.CourseStartDate,
                 CourseEndDate= course.CourseEndDate,
                 TrainHours=course.TrainHours,
+                CreateDate=DateTime.Now,
                 StudentCourses=studentCourses
             };
             db.Courses.Add(record);
@@ -58,15 +60,17 @@ namespace DneTrainNg.Data.Repository
 
         public Boolean DeleteCourse(Guid id)
         {
-            var course = db.Courses.Find(id);
-            db.Courses.Remove(course);
+            var course = db.Courses.Include(c=>c.StudentCourses).FirstOrDefault(s=>s.CourseId.Equals(id));
+            db.Courses.Remove(course); 
             return db.SaveChanges() != -1 ? true : false;
             
         }
 
         public Course GetCourseDetailById(Guid courseId)
         {
-            return db.Courses.AsNoTracking().Include(c => c.StudentCourses).FirstOrDefault(c => c.CourseId.Equals(courseId));
+            return db.Courses.AsNoTracking().Include(c => c.StudentCourses)
+                             .OrderByDescending(c=>c.CreateDate)
+                             .FirstOrDefault(c => c.CourseId.Equals(courseId));
         }
 
         public Task<List<Course>> GetCourseList()
@@ -76,8 +80,8 @@ namespace DneTrainNg.Data.Repository
 
         public Course UpdateCourse(Guid id, CourseChangeViewModel course)
         {
-            var record = db.Courses.Include(c => c.StudentCourses).FirstOrDefault(c => c.CourseId.Equals(id));
-
+            var record = db.Courses.Find(id);
+            var sts = db.StudentCourses.Where(st => st.CourseId.Equals(id));
             record.CourseName = course.CourseName;
             record.CourseStartDate = course.CourseStartDate;
             record.CourseEndDate = course.CourseEndDate;
@@ -85,7 +89,7 @@ namespace DneTrainNg.Data.Repository
 
             List<StudentCourse> studentCourses = new List<StudentCourse>();
 
-            var fromDb = record.StudentCourses.Select(st => st.StudentId);
+            var fromDb = sts.Select(st => st.StudentId);
 
             var fromWeb = course.Students;
 
@@ -93,32 +97,39 @@ namespace DneTrainNg.Data.Repository
             IEnumerable<int> studentsToAdd = fromWeb.Except(fromDb);
             foreach (var studentId in studentsToAdd)
             {
-                var student = db.Students.Include(s => s.Section).AsNoTracking().FirstOrDefault(s => s.StudentId == studentId);
+                var student = db.Students.Find(studentId);
                 if (student != null)
                 {
                     StudentCourse studentCourse = new StudentCourse()
                     {
                         StudentId = studentId,
                         //CourseName=course.CourseName,
-                        CourseId = record.CourseId,
+                        CourseId = id,
                         StudentName = student.StudentName,
-                        SectionName = student.Section.SectionName,
-                        SectionCode = student.Section.SectionCode
+                        SectionName = student.SectionName,
+                        SectionCode = student.SectionCode,
+                        Score="N/A"
                         //TrainHours=course.TrainHours
                     };
                     studentCourses.Add(studentCourse);
-                }
 
+
+                };
             }
+         
+                 
+                
+
+            
             IEnumerable<int> studentsToDelete = fromDb.Except(fromWeb);
             foreach (var studentId in studentsToDelete)
             {
-                var courseStudent = db.CourseStudents.FirstOrDefault(cs => cs.CourseId.Equals(record.CourseId) && cs.StudentId.Equals(studentId));
-                db.CourseStudents.Remove(courseStudent);
+                var courseStudent = db.StudentCourses.FirstOrDefault(cs => cs.CourseId.Equals(record.CourseId) && cs.StudentId.Equals(studentId));
+                db.StudentCourses.Remove(courseStudent);
             }
 
             
-            db.CourseStudents.AddRange(studentCourses);
+            db.StudentCourses.AddRange(studentCourses);
             if (db.SaveChanges() != -1)
                 return db.Courses.Include(c=>c.StudentCourses).FirstOrDefault(c=>c.CourseId.Equals(record.CourseId));
             else { return null; }

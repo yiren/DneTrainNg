@@ -17,7 +17,7 @@ namespace DneTrainNg.Models
 
         public DbSet<Course> Courses { get; set; }
         public DbSet<Student> Students { get; set; }
-        public DbSet<StudentCourse> CourseStudents { get; set; }
+        public DbSet<StudentCourse> StudentCourses { get; set; }
         public DbSet<Section> Sections { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -25,43 +25,57 @@ namespace DneTrainNg.Models
 
             builder.ApplyConfiguration(new CourseEntityConfiguration());
             builder.ApplyConfiguration(new StudentEntityConfiguration());
+            builder.ApplyConfiguration(new SectionEntityConfiguration());
+            builder.ApplyConfiguration(new StudentCourseEntityConfiguration());
 
-            
+        }
 
-            builder.Entity<Section>()
+    }
+
+    class SectionEntityConfiguration : IEntityTypeConfiguration<Section>
+    {
+        public void Configure(EntityTypeBuilder<Section> builder)
+        {
+            builder
                 .HasKey(t => t.SectionId);
 
-            builder.Entity<Section>()
-                .Property(t => t.SectionId).ValueGeneratedOnAdd();
+            builder
+                .Property(t => t.SectionId).ValueGeneratedOnAdd() ;
 
-            builder.Entity<Section>()
+            builder
                    .Property(t => t.SectionId)
                    .ValueGeneratedOnAdd();
 
-            builder.Entity<Section>()
+            builder
                    .Property(t => t.SectionName)
                    .HasMaxLength(20)
                    .IsRequired();
 
-            builder.Entity<Section>()
+            builder
                    .Property(t => t.SectionCode)
                    .HasMaxLength(10)
                    .IsRequired();
 
-            builder.Entity<Student>()
-                   .HasOne(s => s.Section)
-                   .WithMany(t => t.Students)
-                   .HasForeignKey(t => t.StudentId);
+            //builder.HasMany(t => t.Students)
+            //       .WithOne(s => s.Section)
+            //       .HasForeignKey(t => t.StudentId);
+                   
+        }
+    }
 
-            builder.Entity<StudentCourse>()
+    class StudentCourseEntityConfiguration : IEntityTypeConfiguration<StudentCourse>
+    {
+        public void Configure(EntityTypeBuilder<StudentCourse> builder)
+        {
+            builder
                 .HasKey(sc => sc.StudentCourseId);
 
-            builder.Entity<StudentCourse>()
+            builder
                 .Property(sc => sc.StudentCourseId).ValueGeneratedOnAdd();
 
-            
+            builder
+                .Property(sc => sc.Score).HasDefaultValue("N/A");
         }
-
     }
 
     class CourseEntityConfiguration : IEntityTypeConfiguration<Course>
@@ -112,6 +126,10 @@ namespace DneTrainNg.Models
                 .HasMany(s => s.StudentCourses)
                 .WithOne(s => s.Student)
                 .HasForeignKey(s => s.StudentId);
+            builder
+                   .HasOne(s => s.Section)
+                   .WithMany(t => t.Students)
+                   .HasForeignKey(t => t.StudentId);
         }
     }
 }

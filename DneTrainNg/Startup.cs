@@ -33,12 +33,13 @@ namespace DneTrainNg
             {
                 opt.AddPolicy("angular",
                     policy=> {
-                        policy.AllowAnyOrigin();
-                        policy.AllowAnyMethod();
-                        policy.AllowAnyHeader();
+                        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                        
                     });
             });
             services.AddScoped<ICourseRepository, CourseRepository>();
+            services.AddScoped<IStudentRepository, StudentRepository>();
+            services.AddScoped<ISectionRepository, SectionRepository>();
             services.AddMvc()
                     .AddJsonOptions(opt=>
                     {

@@ -13,6 +13,7 @@ namespace DneTrainNg.Models
         public string CourseStartDate { get; set; }
         public string CourseEndDate { get; set; }
         public double TrainHours { get; set; }
+        public DateTime CreateDate { get; set; }
         public List<StudentCourse> StudentCourses { get; set; }
     }
 }
