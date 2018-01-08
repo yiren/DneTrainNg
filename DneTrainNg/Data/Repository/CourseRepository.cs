@@ -135,5 +135,27 @@ namespace DneTrainNg.Data.Repository
             else { return null; }
             
         }
+
+        public IEnumerable<StudentCourse> UpdateScore(Guid courseId, CourseScoreViewModel scoreData)
+        {
+            var dbStudentCourses = db.StudentCourses.Where(sc => sc.CourseId.Equals(courseId));
+
+            foreach (var updateData in scoreData.StudentScoreData)
+            {
+                foreach (var dbData in dbStudentCourses)
+                {
+                    if (dbData.StudentId == updateData.Key)
+                    {
+                        dbData.Score = updateData.Value;
+                        dbData.LastModifiedDate = DateTime.Now.ToString("yyyy/MM/dd");
+                        dbData.LastModifiedBy = scoreData.Modifier;
+                    }
+                }
+            }
+
+            db.SaveChanges();
+            
+            return db.StudentCourses.Where(sc => sc.CourseId.Equals(courseId)).ToList();
+        }
     }
 }

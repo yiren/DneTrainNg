@@ -12,6 +12,7 @@ namespace DneTrainNg.Models.ViewModel
         public string CourseEndDate { get; set; }
         public Double TrainHours { get; set; }
         public IEnumerable<int> Students {get; set;}
+        public string LastModifiedBy { get; set; }
     }
 
     public class CourseDetailViewModel
@@ -20,5 +21,11 @@ namespace DneTrainNg.Models.ViewModel
         public string CourseStartDate { get; set; }
         public string CourseEndDate { get; set; }
         public Double TrainHours { get; set; }
+    }
+
+    public class CourseScoreViewModel
+    {
+        public string Modifier { get; set; }
+        public Dictionary<int, string> StudentScoreData { get; set; }
     }
 }

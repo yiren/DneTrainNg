@@ -110,6 +110,13 @@ namespace DneTrainNg.Controllers
             return Ok();
         }
 
+
+        [HttpPut("{id}/score")]
+        public IEnumerable<StudentCourse> UpdateScore([FromRoute]Guid id, [FromBody]CourseScoreViewModel scoreData)
+        {
+            return repo.UpdateScore(id, scoreData);
+        }
+
         private bool CourseExists(Guid id)
         {
             //return _context.Courses.Any(e => e.CourseId == id);

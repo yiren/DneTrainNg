@@ -14,5 +14,7 @@ namespace DneTrainNg.Models
         public string SectionName { get; set; }
         public string SectionCode { get; set; }
         public string Score { get; set; }
+        public string LastModifiedBy { get; set; }
+        public string LastModifiedDate { get; set; }
     }
 }

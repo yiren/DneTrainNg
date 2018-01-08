@@ -14,5 +14,6 @@ namespace DneTrainNg.Data.Repository
         Course UpdateCourse(Guid id, CourseChangeViewModel course);
         Boolean DeleteCourse(Guid id);
         Course GetCourseDetailById(Guid courseId);
+        IEnumerable<StudentCourse> UpdateScore(Guid courseId, CourseScoreViewModel scoreData);
     }
 }
