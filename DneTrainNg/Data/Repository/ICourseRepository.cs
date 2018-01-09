@@ -15,5 +15,8 @@ namespace DneTrainNg.Data.Repository
         Boolean DeleteCourse(Guid id);
         Course GetCourseDetailById(Guid courseId);
         IEnumerable<StudentCourse> UpdateScore(Guid courseId, CourseScoreViewModel scoreData);
+        IEnumerable<StudentCourse> GetStudentCoursesById(Guid courseId);
+        IEnumerable<Course> SearchCourse(CourseSearchViewModel searchViewModel);
+
     }
 }

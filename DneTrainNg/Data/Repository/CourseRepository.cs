@@ -69,13 +69,39 @@ namespace DneTrainNg.Data.Repository
         public Course GetCourseDetailById(Guid courseId)
         {
             return db.Courses.AsNoTracking().Include(c => c.StudentCourses)
-                             .OrderByDescending(c=>c.CreateDate)
+                             
                              .FirstOrDefault(c => c.CourseId.Equals(courseId));
         }
 
         public Task<List<Course>> GetCourseList()
         {
-            return db.Courses.AsNoTracking().ToListAsync();
+            return db.Courses.AsNoTracking().OrderByDescending(c => c.CreateDate).ToListAsync();
+        }
+
+        public IEnumerable<StudentCourse> GetStudentCoursesById(Guid courseId)
+        {
+            return db.StudentCourses.AsNoTracking().Where(sc => sc.CourseId.Equals(courseId)).ToList();
+        }
+
+        public IEnumerable<Course> SearchCourse(CourseSearchViewModel searchViewModel)
+        {
+            var c1=db.Courses.AsNoTracking();
+            if (!string.IsNullOrEmpty(searchViewModel.CourseName))
+            {
+                c1 = c1.Where(c => c.CourseName.Contains(searchViewModel.CourseName));
+            }
+
+            if (!string.IsNullOrEmpty(searchViewModel.CourseStartDate))
+            {
+                c1 = c1.Where(c => Convert.ToDateTime(c.CourseStartDate) >= Convert.ToDateTime(searchViewModel.CourseStartDate));
+            }
+
+            if (!string.IsNullOrEmpty(searchViewModel.CourseEndDate))
+            {
+                c1 = c1.Where(c => Convert.ToDateTime(c.CourseEndDate) <= Convert.ToDateTime(searchViewModel.CourseEndDate));
+            }
+
+            return c1.Include(c => c.StudentCourses).ToList();
         }
 
         public Course UpdateCourse(Guid id, CourseChangeViewModel course)

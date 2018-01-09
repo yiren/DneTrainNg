@@ -28,4 +28,12 @@ namespace DneTrainNg.Models.ViewModel
         public string Modifier { get; set; }
         public Dictionary<int, string> StudentScoreData { get; set; }
     }
+
+    public class CourseSearchViewModel
+    {
+        public string CourseName { get; set; }
+        public string CourseStartDate { get; set; }
+        public string CourseEndDate { get; set; }
+
+    }
 }

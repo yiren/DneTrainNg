@@ -1,16 +1,20 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - DneTrainNg</title>
+    <title>核技處訓練系統</title>
     <base href="~/" />
-
-    <link rel="stylesheet" href="~/dist/vendor.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700|Poppins:400,500,600" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
+    <div id="loader-wrapper" display="none">
+        <div id="loader"></div>
+    </div>
     @RenderBody()
 
     @RenderSection("scripts", required: false)
+    @Html.Partial("~/wwwroot/dist/angular.html")
 </body>
 </html>

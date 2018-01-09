@@ -31,6 +31,15 @@ namespace DneTrainNg.Data.Repository
         {
             var record = db.Sections.Find(sectionId);
             db.Sections.Remove(record);
+            var sectionStudents=db.Students.Where(s => s.SectionId.Equals(sectionId));
+            foreach (var student in sectionStudents)
+            {
+                student.Section = null;
+                student.SectionCode = "ZZ";
+                // 99代表不隸屬任何一組
+                student.SectionId = 99;
+                student.SectionName = "未隸屬任何組別";
+            }
             db.SaveChanges();
         }
 

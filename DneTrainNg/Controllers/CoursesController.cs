@@ -122,5 +122,19 @@ namespace DneTrainNg.Controllers
             //return _context.Courses.Any(e => e.CourseId == id);
             return false;
         }
+
+
+        [HttpGet("{id}/StudentCourse")]
+        public IEnumerable<StudentCourse> GetStudentCourseById(Guid courseId)
+        {
+            return repo.GetStudentCoursesById(courseId);
+        }
+
+        [HttpPost("search")]
+        public IEnumerable<Course> SearchCourse([FromBody]CourseSearchViewModel searchViewModel)
+        {
+            return repo.SearchCourse(searchViewModel);
+        }
+
     }
 }
