@@ -130,10 +130,16 @@ namespace DneTrainNg.Controllers
             return repo.GetStudentCoursesById(courseId);
         }
 
-        [HttpPost("search")]
+        [HttpPost("searchbycourse")]
         public IEnumerable<Course> SearchCourse([FromBody]CourseSearchViewModel searchViewModel)
         {
             return repo.SearchCourse(searchViewModel);
+        }
+
+        [HttpPost("searchbystudent")]
+        public IEnumerable<Course> SearchCourseByStudent([FromBody] CourseSearchByStduentViewModel searchViewModel)
+        {
+            return repo.SearchCourseByStudent(searchViewModel);
         }
 
     }

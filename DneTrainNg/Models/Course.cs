@@ -9,7 +9,6 @@ namespace DneTrainNg.Models
         [Key]
         public Guid CourseId { get; set; }
         public string CourseName { get; set; }
-        public short CourseYear { get; set; }
         public string CourseStartDate { get; set; }
         public string CourseEndDate { get; set; }
         public double TrainHours { get; set; }

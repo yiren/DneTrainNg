@@ -36,4 +36,12 @@ namespace DneTrainNg.Models.ViewModel
         public string CourseEndDate { get; set; }
 
     }
+
+    public class CourseSearchByStduentViewModel
+    {
+        public string StudentName { get; set; }
+        public string CourseStartDate { get; set; }
+        public string CourseEndDate { get; set; }
+    }
+
 }

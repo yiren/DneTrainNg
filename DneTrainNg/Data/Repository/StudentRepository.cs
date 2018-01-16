@@ -61,9 +61,10 @@ namespace DneTrainNg.Data.Repository
             dbStudent.StudentName = student.StudentName;
             foreach (var item in dbStudent.StudentCourses)
             {
-                dbStudent.SectionName = newSection.SectionName;
-                dbStudent.SectionCode = newSection.SectionCode;
-                dbStudent.StudentName = student.StudentName;
+                item.SectionName = newSection.SectionName;
+                item.SectionCode = newSection.SectionCode;
+                item.StudentName = student.StudentName;
+                
             }
             db.SaveChanges();
             
