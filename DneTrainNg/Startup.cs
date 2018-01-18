@@ -28,7 +28,8 @@ namespace DneTrainNg
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<TrainingDbContext>(
-                opt => opt.UseInMemoryDatabase("TrainingDb"));
+                opt => opt.UseInMemoryDatabase("TrainDb")); 
+
             services.AddCors(opt =>
             {
                 opt.AddPolicy("angular",
@@ -37,6 +38,7 @@ namespace DneTrainNg
                         
                     });
             });
+            services.AddScoped<IReportRepository, ReportRepository>();
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddScoped<ISectionRepository, SectionRepository>();

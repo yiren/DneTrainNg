@@ -133,7 +133,7 @@ namespace DneTrainNg.Data.SeedData
                 StudentName = "李念中",
                 SectionCode = "J",
                 SectionName = "儀控組",
-                SectionId = SectionJ.SectionId
+                //SectionId = SectionJ.SectionId
             };
             var SA1 = new Student()
             {
@@ -141,7 +141,7 @@ namespace DneTrainNg.Data.SeedData
                 StudentName = "廖經政",
                 SectionCode = "A",
                 SectionName = "策劃組",
-                SectionId = SectionA.SectionId
+                //SectionId = SectionA.SectionId
             };
             var SN1 = new Student()
             {
@@ -149,7 +149,7 @@ namespace DneTrainNg.Data.SeedData
                 StudentName = "李宗翰",
                 SectionCode = "N",
                 SectionName = "核析組",
-                SectionId = SectionN.SectionId
+                //SectionId = SectionN.SectionId
             };
             var SE1 = new Student()
             {
@@ -157,7 +157,7 @@ namespace DneTrainNg.Data.SeedData
                 StudentName = "謝文龍",
                 SectionCode = "E",
                 SectionName = "電氣組",
-                SectionId = SectionE.SectionId
+                //SectionId = SectionE.SectionId
             };
             var SB1 = new Student()
             {
@@ -165,7 +165,7 @@ namespace DneTrainNg.Data.SeedData
                 StudentName = "張漢清",
                 SectionCode = "B",
                 SectionName = "PE_II",
-                SectionId = SectionB.SectionId
+                //SectionId = SectionB.SectionId
             };
             var SM1 = new Student()
             {
@@ -173,7 +173,7 @@ namespace DneTrainNg.Data.SeedData
                 StudentName = "陳政瑋",
                 SectionCode = "M",
                 SectionName = "機械組",
-                SectionId = SectionM.SectionId
+                //SectionId = SectionM.SectionId
             };
             var SV1 = new Student()
             {
@@ -181,7 +181,7 @@ namespace DneTrainNg.Data.SeedData
                 StudentName = "李瑞蓮",
                 SectionCode = "V",
                 SectionName = "處長室",
-                SectionId = SectionV.SectionId
+                //SectionId = SectionV.SectionId
             };
             var SO1 = new Student()
             {
@@ -189,7 +189,7 @@ namespace DneTrainNg.Data.SeedData
                 StudentName = "賴逢裕",
                 SectionCode = "O",
                 SectionName = "機械組",
-                SectionId = SectionO.SectionId
+                //SectionId = SectionO.SectionId
             };
             var students = new Student[]
             {
