@@ -6,7 +6,7 @@ namespace DneTrainNg.Models
 {
     public class Course
     {
-        [Key]
+        
         public Guid CourseId { get; set; }
         public string CourseName { get; set; }
         public string CourseStartDate { get; set; }

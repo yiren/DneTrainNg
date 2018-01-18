@@ -17,6 +17,15 @@ namespace DneTrainNg.Data.SeedData
                 return;
             }
 
+            //if (context.Sections.Any())
+            //{
+            //    return;
+            //}
+
+            //if (context.Students.Any())
+            //{
+            //    return;
+            //}
 
             var c1 = new Course()
             {
@@ -52,156 +61,164 @@ namespace DneTrainNg.Data.SeedData
                 c3
             };
 
-            var SectionM = new Section()
-            {
-                //SectionId=1,
-                SectionName = "機械組",
-                SectionCode = "M"
-            };
-            var SectionN = new Section()
-            {
-                //SectionId=1,
-                SectionName = "核析組",
-                SectionCode = "N"
-            };
-            var SectionE = new Section()
-            {
-                //SectionId=1,
-                SectionName = "電氣組",
-                SectionCode = "E"
-            };
-            var SectionB = new Section()
-            {
-                //SectionId=1,
-                SectionName = "PE II",
-                SectionCode = "B"
-            };
-            var SectionA = new Section()
-            {
-                //SectionId=1,
-                SectionName = "策劃組",
-                SectionCode = "A"
-            };
-            var SectionJ = new Section()
-            {
-                //SectionId=1,
-                SectionName = "儀控組",
-                SectionCode = "J",
+            //var SectionM = new Section()
+            //{
+            //    //SectionId=1,
+            //    SectionName = "機械組",
+            //    SectionCode = "M"
+            //};
+            //var SectionN = new Section()
+            //{
+            //    //SectionId=1,
+            //    SectionName = "核析組",
+            //    SectionCode = "N"
+            //};
+            //var SectionE = new Section()
+            //{
+            //    //SectionId=1,
+            //    SectionName = "電氣組",
+            //    SectionCode = "E"
+            //};
+            //var SectionB = new Section()
+            //{
+            //    //SectionId=1,
+            //    SectionName = "PE II",
+            //    SectionCode = "B"
+            //};
+            //var SectionA = new Section()
+            //{
+            //    //SectionId=1,
+            //    SectionName = "策劃組",
+            //    SectionCode = "A"
+            //};
+            //var SectionJ = new Section()
+            //{
+            //    //SectionId=1,
+            //    SectionName = "儀控組",
+            //    SectionCode = "J",
 
-            };
-            var SectionV = new Section()
-            {
-                //SectionId=1,
-                SectionName = "處長室",
-                SectionCode = "V",
+            //};
+            //var SectionV = new Section()
+            //{
+            //    //SectionId=1,
+            //    SectionName = "處長室",
+            //    SectionCode = "V",
 
-            };
-            var SectionO = new Section()
-            {
-                //SectionId=1,
-                SectionName = "移出",
-                SectionCode = "O",
+            //};
+            //var SectionO = new Section()
+            //{
+            //    //SectionId=1,
+            //    SectionName = "移出",
+            //    SectionCode = "O",
 
-            };
-            var sections = new Section[]
-            {
-                SectionM,
-                SectionN,
-                SectionE,
-                SectionB,
-                SectionA,
-                SectionJ,
-                SectionV,
-                SectionO
-            };
+            //};
+            //var sections = new Section[]
+            //{
+            //    SectionM,
+            //    SectionN,
+            //    SectionE,
+            //    SectionB,
+            //    SectionA,
+            //    SectionJ,
+            //    SectionV,
+            //    SectionO
+            //};
 
-            foreach (var course in courses)
-            {
-                context.Courses.Add(course);
-            }
+            //foreach (var course in courses)
+            //{
+            //    context.Courses.Add(course);
+            //}
 
-            foreach (var section in sections)
-            {
-                context.Sections.Add(section);
-            }
+            //foreach (var section in sections)
+            //{
+            //    context.Sections.Add(section);
+            //}
 
-            context.SaveChanges();
+            //context.SaveChanges();
 
-            var SJ1 = new Student()
-            {
-                //StudentId=1,
-                StudentName = "李念中",
-                SectionCode = "J",
-                SectionName = "儀控組",
-                //SectionId = SectionJ.SectionId
-            };
-            var SA1 = new Student()
-            {
-                // StudentId=2,
-                StudentName = "廖經政",
-                SectionCode = "A",
-                SectionName = "策劃組",
-                //SectionId = SectionA.SectionId
-            };
-            var SN1 = new Student()
-            {
-                //StudentId=3,
-                StudentName = "李宗翰",
-                SectionCode = "N",
-                SectionName = "核析組",
-                //SectionId = SectionN.SectionId
-            };
-            var SE1 = new Student()
-            {
-                //
-                StudentName = "謝文龍",
-                SectionCode = "E",
-                SectionName = "電氣組",
-                //SectionId = SectionE.SectionId
-            };
-            var SB1 = new Student()
-            {
-                //
-                StudentName = "張漢清",
-                SectionCode = "B",
-                SectionName = "PE_II",
-                //SectionId = SectionB.SectionId
-            };
-            var SM1 = new Student()
-            {
-                //StudentId=6,
-                StudentName = "陳政瑋",
-                SectionCode = "M",
-                SectionName = "機械組",
-                //SectionId = SectionM.SectionId
-            };
-            var SV1 = new Student()
-            {
-                //StudentId=6,
-                StudentName = "李瑞蓮",
-                SectionCode = "V",
-                SectionName = "處長室",
-                //SectionId = SectionV.SectionId
-            };
-            var SO1 = new Student()
-            {
-                //StudentId=6,
-                StudentName = "賴逢裕",
-                SectionCode = "O",
-                SectionName = "機械組",
-                //SectionId = SectionO.SectionId
-            };
-            var students = new Student[]
-            {
-               SJ1,
-               SE1,
-               SA1,
-               SB1,
-               SN1,
-               SM1,
-               SV1,
-               SO1
-            };
+            //var SJ1 = new Student()
+            //{
+            //    //StudentId=1,
+            //    StudentName = "李念中",
+            //    SectionCode = "J",
+            //    SectionName = "儀控組",
+            //    Section=null,
+            //    SectionId = SectionJ.SectionId
+            //};
+            //var SA1 = new Student()
+            //{
+            //    // StudentId=2,
+            //    StudentName = "廖經政",
+            //    SectionCode = "A",
+            //    SectionName = "策劃組",
+            //    Section = null,
+            //    SectionId = SectionA.SectionId
+            //};
+            //var SN1 = new Student()
+            //{
+            //    //StudentId=3,
+            //    StudentName = "李宗翰",
+            //    SectionCode = "N",
+            //    SectionName = "核析組",
+            //    Section = null,
+            //    SectionId = SectionN.SectionId
+            //};
+            //var SE1 = new Student()
+            //{
+            //    //
+            //    StudentName = "謝文龍",
+            //    SectionCode = "E",
+            //    SectionName = "電氣組",
+            //    Section = null,
+            //    SectionId = SectionE.SectionId
+            //};
+            //var SB1 = new Student()
+            //{
+            //    //
+            //    StudentName = "張漢清",
+            //    SectionCode = "B",
+            //    SectionName = "PE_II",
+            //    Section = null,
+            //    SectionId = SectionB.SectionId
+            //};
+            //var SM1 = new Student()
+            //{
+            //    //StudentId=6,
+            //    StudentName = "陳政瑋",
+            //    SectionCode = "M",
+            //    SectionName = "機械組",
+            //    Section = null,
+            //    SectionId = SectionM.SectionId
+            //};
+            //var SV1 = new Student()
+            //{
+            //    //StudentId=6,
+            //    StudentName = "李瑞蓮",
+            //    SectionCode = "V",
+            //    SectionName = "處長室",
+            //    Section = null,
+            //    SectionId = SectionV.SectionId
+            //};
+            //var SO1 = new Student()
+            //{
+            //    //StudentId=6,
+            //    StudentName = "賴逢裕",
+            //    SectionCode = "O",
+            //    SectionName = "移出",
+            //    Section = null,
+            //    SectionId = SectionO.SectionId
+            //};
+            //var students = new Student[]
+            //{
+            //   SJ1,
+            //   SE1,
+            //   SA1,
+            //   SB1,
+            //   SN1,
+            //   SM1,
+            //   SV1,
+            //   SO1
+            //};
 
 
 
@@ -231,12 +248,12 @@ namespace DneTrainNg.Data.SeedData
             //SectionO.Students = new List<Student> {
             //    SO1
             //};
-            foreach (var student in students)
-            {
-                context.Students.Add(student);
-            }
+            //foreach (var student in students)
+            //{
+            //    context.Students.Add(student);
+            //}
 
-            context.SaveChanges();
+            //context.SaveChanges();
             //var sc1 = new StudentCourse
             //{
             //    CourseId=c1.CourseId,

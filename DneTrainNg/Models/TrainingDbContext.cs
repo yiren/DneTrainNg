@@ -56,10 +56,10 @@ namespace DneTrainNg.Models
                    .HasMaxLength(10)
                    .IsRequired();
 
-            //builder.HasMany(t => t.Students)
-            //       .WithOne(s => s.Section)
-            //       .HasForeignKey(t => t.StudentId);
-                   
+            builder.HasMany(t => t.Students)
+                   .WithOne(s => s.Section)
+                   .HasForeignKey(t => t.SectionId);
+
         }
     }
 
@@ -99,7 +99,11 @@ namespace DneTrainNg.Models
                 .HasMaxLength(50);
 
             builder
-                .Property(c => c.TrainHours);
+                .Property(c => c.LastModifiedBy)
+                .HasMaxLength(30);
+            builder
+                .Property(c => c.LastModifiedDate)
+                .HasMaxLength(50);
 
             builder
                 .HasMany(c => c.StudentCourses)
@@ -126,10 +130,14 @@ namespace DneTrainNg.Models
                 .HasMany(s => s.StudentCourses)
                 .WithOne(s => s.Student)
                 .HasForeignKey(s => s.StudentId);
+
             builder
-                   .HasOne(s => s.Section)
-                   .WithMany(t => t.Students)
-                   .HasForeignKey(t => t.StudentId);
+                .Property(s => s.SectionCode)
+                .HasMaxLength(10);
+
+            builder
+                .Property(s => s.SectionName)
+                .HasMaxLength(50);
         }
     }
 }

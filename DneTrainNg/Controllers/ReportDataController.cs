@@ -33,7 +33,7 @@ namespace DneTrainNg.Controllers
         }
 
         // GET: api/ReportData/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public string Get(int id)
         {
             return "value";

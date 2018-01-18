@@ -75,7 +75,7 @@ namespace DneTrainNg.Data.Repository
 
         public Task<List<Course>> GetCourseList()
         {
-            return db.Courses.AsNoTracking().OrderByDescending(c => c.CreateDate).ToListAsync();
+            return db.Courses.AsNoTracking().OrderByDescending(c => c.CourseStartDate).ThenByDescending(c=>c.CourseEndDate).ToListAsync();
         }
 
         public IEnumerable<StudentCourse> GetStudentCoursesById(Guid courseId)

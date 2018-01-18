@@ -28,7 +28,7 @@ namespace DneTrainNg
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<TrainingDbContext>(
-                opt => opt.UseInMemoryDatabase("TrainDb")); 
+                opt => opt.UseSqlServer(Configuration.GetConnectionString("DneTraining"))); 
 
             services.AddCors(opt =>
             {
