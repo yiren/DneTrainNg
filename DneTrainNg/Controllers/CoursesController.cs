@@ -91,7 +91,7 @@ namespace DneTrainNg.Controllers
 
         // DELETE: api/Courses/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCourse([FromRoute] Guid id)
+        public Boolean DeleteCourse([FromRoute] Guid id)
         {
             //if (!ModelState.IsValid)
             //{
@@ -107,7 +107,7 @@ namespace DneTrainNg.Controllers
             //_context.Courses.Remove(course);
             //await _context.SaveChangesAsync();
 
-            return Ok();
+            return repo.DeleteCourse(id);
         }
 
 

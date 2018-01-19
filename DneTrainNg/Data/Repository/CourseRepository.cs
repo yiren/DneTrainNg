@@ -41,7 +41,7 @@ namespace DneTrainNg.Data.Repository
                 }
                 
             }
-
+            
             var record = new Course()
             {
                 CourseId=courseId,
@@ -53,7 +53,7 @@ namespace DneTrainNg.Data.Repository
                 StudentCourses=studentCourses
             };
             db.Courses.Add(record);
-            db.SaveChangesAsync();
+            db.SaveChanges();
             
             return db.Courses.Find(record.CourseId);
         }
@@ -101,7 +101,7 @@ namespace DneTrainNg.Data.Repository
                 c1 = c1.Where(c => Convert.ToDateTime(c.CourseEndDate) <= Convert.ToDateTime(searchViewModel.CourseEndDate));
             }
 
-            return c1.Include(c => c.StudentCourses).ToList();
+            return c1.Include(c => c.StudentCourses).OrderByDescending(c=>c.CourseStartDate).ThenByDescending(c=>c.CourseEndDate).ToList();
         }
 
         public IEnumerable<Course> SearchCourseByStudent(CourseSearchByStduentViewModel studentSearchViewModel)
@@ -131,7 +131,7 @@ namespace DneTrainNg.Data.Repository
                 data = data.Where(c => Convert.ToDateTime(c.CourseEndDate) <= Convert.ToDateTime(studentSearchViewModel.CourseEndDate));
             }
 
-            return data.ToList();
+            return data.OrderByDescending(c=>c.CourseStartDate).ThenByDescending(c=>c.CourseEndDate).ToList();
             
         }
 

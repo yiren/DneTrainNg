@@ -21,9 +21,13 @@
   <ItemGroup>
     <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
     <Compile Remove="ClientApp\**" />
+    <Compile Remove="ngTrainAdmin\**" />
     <Content Remove="ClientApp\**" />
+    <Content Remove="ngTrainAdmin\**" />
     <EmbeddedResource Remove="ClientApp\**" />
+    <EmbeddedResource Remove="ngTrainAdmin\**" />
     <None Remove="ClientApp\**" />
+    <None Remove="ngTrainAdmin\**" />
   </ItemGroup>
 
   <ItemGroup>
