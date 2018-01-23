@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DneTrainNg.Data.Repository;
+using DneTrainNg.Models;
 using DneTrainNg.Models.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,12 +11,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace DneTrainNg.Controllers
 {
     [Produces("application/json")]
-    [Route("api/ReportData")]
-    public class ReportDataController : Controller
+    [Route("api/searchdata")]
+    public class SearchDataController : Controller
     {
-        private readonly IReportRepository repo;
+        private readonly ISearchRepository repo;
 
-        public ReportDataController(IReportRepository _repo)
+        public SearchDataController(ISearchRepository _repo)
         {
             repo = _repo;
         }
@@ -30,6 +31,25 @@ namespace DneTrainNg.Controllers
         public string GetAverageTrainHours([FromBody]ReportForAverageTrainHoursViewModel averageVM)
         {
             return repo.GetDepAverageTrainHour(averageVM);
+        }
+
+        [HttpPost("searchbysection")]
+        public IEnumerable<CourseQueryExportViewModel> ExportTrainingRecord([FromBody]QueryForTrainingRecord queryVM)
+        {
+            return repo.ExportTrainingRecord(queryVM);
+
+        }
+
+        [HttpPost("searchbycourse")]
+        public IEnumerable<Course> SearchCourse([FromBody]CourseSearchViewModel searchViewModel)
+        {
+            return repo.SearchCourse(searchViewModel);
+        }
+
+        [HttpPost("searchbystudent")]
+        public IEnumerable<Course> SearchCourseByStudent([FromBody] CourseSearchByStduentViewModel searchViewModel)
+        {
+            return repo.SearchCourseByStudent(searchViewModel);
         }
 
         // GET: api/ReportData/5

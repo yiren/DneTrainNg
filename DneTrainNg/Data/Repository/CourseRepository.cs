@@ -44,13 +44,13 @@ namespace DneTrainNg.Data.Repository
             
             var record = new Course()
             {
-                CourseId=courseId,
-                CourseName=course.CourseName,
-                CourseStartDate=course.CourseStartDate,
+                CourseId= courseId,
+                CourseName= course.CourseName,
+                CourseStartDate= course.CourseStartDate,
                 CourseEndDate= course.CourseEndDate,
-                TrainHours=course.TrainHours,
-                CreateDate=DateTime.Now,
-                StudentCourses=studentCourses
+                TrainHours= course.TrainHours,
+                CreateDate= DateTime.Now,
+                StudentCourses= studentCourses
             };
             db.Courses.Add(record);
             db.SaveChanges();
@@ -83,58 +83,7 @@ namespace DneTrainNg.Data.Repository
             return db.StudentCourses.AsNoTracking().Where(sc => sc.CourseId.Equals(courseId)).ToList();
         }
 
-        public IEnumerable<Course> SearchCourse(CourseSearchViewModel searchViewModel)
-        {
-            var c1=db.Courses.AsNoTracking();
-            if (!string.IsNullOrEmpty(searchViewModel.CourseName))
-            {
-                c1 = c1.Where(c => c.CourseName.Contains(searchViewModel.CourseName));
-            }
-
-            if (!string.IsNullOrEmpty(searchViewModel.CourseStartDate))
-            {
-                c1 = c1.Where(c => Convert.ToDateTime(c.CourseStartDate) >= Convert.ToDateTime(searchViewModel.CourseStartDate));
-            }
-
-            if (!string.IsNullOrEmpty(searchViewModel.CourseEndDate))
-            {
-                c1 = c1.Where(c => Convert.ToDateTime(c.CourseEndDate) <= Convert.ToDateTime(searchViewModel.CourseEndDate));
-            }
-
-            return c1.Include(c => c.StudentCourses).OrderByDescending(c=>c.CourseStartDate).ThenByDescending(c=>c.CourseEndDate).ToList();
-        }
-
-        public IEnumerable<Course> SearchCourseByStudent(CourseSearchByStduentViewModel studentSearchViewModel)
-        {
-            //var s1 = db.Students.Include(s=>s.StudentCourses)
-            //                    .ThenInclude(g=>g.Select(d=>d.Course))
-            //    .AsNoTracking().First(s=>s.StudentId==studentSearchViewModel.StudentId);
-
-            var data = from s in db.Students.AsNoTracking().Where(s => s.StudentName.Equals(studentSearchViewModel.StudentName))
-                       join sc in db.StudentCourses.AsNoTracking() on s.StudentId equals sc.StudentId
-                       join c in db.Courses.AsNoTracking() on sc.CourseId equals c.CourseId
-                       select new Course
-                       {
-                           CourseId = c.CourseId,
-                           CourseName = c.CourseName,
-                           CourseStartDate = c.CourseStartDate,
-                           CourseEndDate = c.CourseEndDate,
-                           TrainHours = c.TrainHours,
-                       };
-            if (!string.IsNullOrEmpty(studentSearchViewModel.CourseStartDate))
-            {
-                data = data.Where(c => Convert.ToDateTime(c.CourseStartDate) >= Convert.ToDateTime(studentSearchViewModel.CourseStartDate));
-            }
-
-            if (!string.IsNullOrEmpty(studentSearchViewModel.CourseEndDate))
-            {
-                data = data.Where(c => Convert.ToDateTime(c.CourseEndDate) <= Convert.ToDateTime(studentSearchViewModel.CourseEndDate));
-            }
-
-            return data.OrderByDescending(c=>c.CourseStartDate).ThenByDescending(c=>c.CourseEndDate).ToList();
-            
-        }
-
+        
         public Course UpdateCourse(Guid id, CourseChangeViewModel course)
         {
             var record = db.Courses.Find(id);

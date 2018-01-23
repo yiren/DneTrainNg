@@ -38,7 +38,7 @@ namespace DneTrainNg
                         
                     });
             });
-            services.AddScoped<IReportRepository, ReportRepository>();
+            services.AddScoped<ISearchRepository, SearchRepository>();
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddScoped<ISectionRepository, SectionRepository>();

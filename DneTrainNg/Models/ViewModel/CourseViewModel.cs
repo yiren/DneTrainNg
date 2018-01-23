@@ -21,6 +21,7 @@ namespace DneTrainNg.Models.ViewModel
         public string CourseStartDate { get; set; }
         public string CourseEndDate { get; set; }
         public Double TrainHours { get; set; }
+        public IEnumerable<StudentCourse> StudentCourses { get; set; }
     }
 
     public class CourseScoreViewModel
