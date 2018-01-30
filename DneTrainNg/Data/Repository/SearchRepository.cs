@@ -22,6 +22,7 @@ namespace DneTrainNg.Data.Repository
             var queryCourses = db.Courses.AsNoTracking();
             var querySections = db.Sections.AsNoTracking();
             var querySC = db.StudentCourses.AsNoTracking();
+
             if (!string.IsNullOrEmpty(queryVM.StartDate))
             {
                 queryCourses = queryCourses.Where(c=>string.Compare(c.CourseStartDate, queryVM.StartDate) >= 0);
@@ -61,6 +62,7 @@ namespace DneTrainNg.Data.Repository
         public IEnumerable<Course> SearchCourse(CourseSearchViewModel searchViewModel)
         {
             var c1 = db.Courses.AsNoTracking();
+
             if (!string.IsNullOrEmpty(searchViewModel.CourseName))
             {
                 c1 = c1.Where(c => c.CourseName.Contains(searchViewModel.CourseName));
@@ -99,6 +101,7 @@ namespace DneTrainNg.Data.Repository
                            CourseEndDate = c.CourseEndDate,
                            TrainHours = c.TrainHours,
                        };
+
             if (!string.IsNullOrEmpty(studentSearchViewModel.CourseStartDate))
             {
                 data = data.Where(c => string.Compare(c.CourseStartDate,studentSearchViewModel.CourseStartDate) >=0);
@@ -120,11 +123,14 @@ namespace DneTrainNg.Data.Repository
             {
                 return "系統錯誤";
             }
+
             if (!string.IsNullOrEmpty(averageVM.StartDate) || !string.IsNullOrEmpty(averageVM.EndDate))
             {
                 var startDate = Convert.ToDateTime(averageVM.StartDate);
                 var endDate = Convert.ToDateTime(averageVM.EndDate);
+
                 var queriedCourses = db.Courses.AsNoTracking();
+
                 if (endDate < startDate)
                 {
                     return "結束日期大於起始日期";
@@ -144,9 +150,6 @@ namespace DneTrainNg.Data.Repository
             {
                 return "未選擇日期";
             }
-               
-            
-           
         }
     }
 }

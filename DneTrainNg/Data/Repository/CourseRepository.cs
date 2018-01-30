@@ -21,6 +21,7 @@ namespace DneTrainNg.Data.Repository
         {
             List<StudentCourse> studentCourses = new List<StudentCourse>();
             Guid courseId = Guid.NewGuid();
+
             foreach(var studentId in course.Students)
             {
                 var student = db.Students.Find(studentId);
@@ -39,7 +40,6 @@ namespace DneTrainNg.Data.Repository
                     };
                     studentCourses.Add(studentCourse);
                 }
-                
             }
             
             var record = new Course()
@@ -83,11 +83,11 @@ namespace DneTrainNg.Data.Repository
             return db.StudentCourses.AsNoTracking().Where(sc => sc.CourseId.Equals(courseId)).ToList();
         }
 
-        
         public Course UpdateCourse(Guid id, CourseChangeViewModel course)
         {
             var record = db.Courses.Find(id);
             var sts = db.StudentCourses.Where(st => st.CourseId.Equals(id));
+
             record.CourseName = course.CourseName;
             record.CourseStartDate = course.CourseStartDate;
             record.CourseEndDate = course.CourseEndDate;
@@ -99,11 +99,11 @@ namespace DneTrainNg.Data.Repository
 
             var fromWeb = course.Students;
 
-
             IEnumerable<int> studentsToAdd = fromWeb.Except(fromDb);
             foreach (var studentId in studentsToAdd)
             {
                 var student = db.Students.Find(studentId);
+
                 if (student != null)
                 {
                     StudentCourse studentCourse = new StudentCourse()
@@ -118,14 +118,8 @@ namespace DneTrainNg.Data.Repository
                         //TrainHours=course.TrainHours
                     };
                     studentCourses.Add(studentCourse);
-
-
                 };
             }
-         
-                 
-                
-
             
             IEnumerable<int> studentsToDelete = fromDb.Except(fromWeb);
             foreach (var studentId in studentsToDelete)
@@ -133,7 +127,6 @@ namespace DneTrainNg.Data.Repository
                 var courseStudent = db.StudentCourses.FirstOrDefault(cs => cs.CourseId.Equals(record.CourseId) && cs.StudentId.Equals(studentId));
                 db.StudentCourses.Remove(courseStudent);
             }
-
             
             db.StudentCourses.AddRange(studentCourses);
             if (db.SaveChanges() != -1)

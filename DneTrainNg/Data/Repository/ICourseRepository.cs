@@ -16,7 +16,5 @@ namespace DneTrainNg.Data.Repository
         Course GetCourseDetailById(Guid courseId);
         IEnumerable<StudentCourse> UpdateScore(Guid courseId, CourseScoreViewModel scoreData);
         IEnumerable<StudentCourse> GetStudentCoursesById(Guid courseId);
-       
-
     }
 }
