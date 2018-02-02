@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 namespace DneTrainNg.Controllers
 {
@@ -43,16 +45,78 @@ namespace DneTrainNg.Controllers
             return new string[] { "value1", "value2" };
         }
 
+        [HttpPost("facebookAuth")]
         public async Task<IActionResult> FackbookLogin([FromBody]ExternalLoginViewModel model)
         {
             try
             {
+                var fbApiUrl = Configuration["ExternalAuth:FB:url"];
+                var fbQueryString = String.Format($"me?scope=email&access_token={model.access_token}&field=id,name,email");
 
+                string result = null;
+                using (var c = new HttpClient())
+                {
+                    c.BaseAddress = new Uri(fbApiUrl);
+                    var response = await c.GetAsync(fbQueryString);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        result = await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        throw new Exception("Authentication Error");
+                    }
+                }
+
+                var epInfo = JsonConvert.DeserializeObject<Dictionary<string, string>>(result);
+                var info = new UserLoginInfo("facebook", epInfo["id"], "Facebook");
+
+                var user = await UserManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+
+                if (user == null)
+                {
+                    user = await UserManager.FindByEmailAsync(epInfo["email"]);
+                    if (user == null)
+                    {
+                        var username = String.Format($"FB{epInfo["id"]}{Guid.NewGuid().ToString()}");
+                        user = new ApplicationUser
+                        {
+                            SecurityStamp = Guid.NewGuid().ToString(),
+                            Email=epInfo["email"],
+                            UserName=username
+                        };
+                        await UserManager.CreateAsync(user, user.Email);
+
+                        await UserManager.AddToRoleAsync(user, "user");
+
+                        user.EmailConfirmed = true;
+                        user.LockoutEnabled = false;
+                        dbContext.SaveChanges();
+                    }
+
+                }
+
+                var ir = await UserManager.AddLoginAsync(user, info);
+                if (ir.Succeeded)
+                {
+                    dbContext.SaveChanges();
+                }
+                else
+                {
+                    throw new Exception("Authentication Error");
+                }
+
+                var rt = CreateRefreshToken(model.client_id, user.Id);
+                dbContext.ApplicationTokens.Add(rt);
+                dbContext.SaveChanges();
+
+                var t = CreateAccessToken(user.Id, rt.Value);
+                return Json(t);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                return BadRequest(new { Error = ex.Message });
             }
         }
 

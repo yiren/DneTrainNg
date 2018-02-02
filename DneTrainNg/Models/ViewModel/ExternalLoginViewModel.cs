@@ -7,5 +7,8 @@ namespace DneTrainNg.Models.ViewModel
 {
     public class ExternalLoginViewModel
     {
+        public string access_token { get; set; }
+
+        public string client_id { get; set; }
     }
 }
