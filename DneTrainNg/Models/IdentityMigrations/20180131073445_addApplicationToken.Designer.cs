@@ -11,9 +11,10 @@ using System;
 namespace DneTrainNg.models.IdentityMigrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180131073445_addApplicationToken")]
+    partial class addApplicationToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,31 +43,6 @@ namespace DneTrainNg.models.IdentityMigrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
-                });
-
-            modelBuilder.Entity("DneTrainNg.Models.ApplicationToken", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ClientId")
-                        .IsRequired();
-
-                    b.Property<DateTime>("CreateDate");
-
-                    b.Property<int>("Type");
-
-                    b.Property<string>("UserId")
-                        .IsRequired();
-
-                    b.Property<string>("Value")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ApplicationTokens");
                 });
 
             modelBuilder.Entity("DneTrainNg.Models.ApplicationUser", b =>
@@ -202,14 +178,6 @@ namespace DneTrainNg.models.IdentityMigrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("DneTrainNg.Models.ApplicationToken", b =>
-                {
-                    b.HasOne("DneTrainNg.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("ApplicationTokens")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

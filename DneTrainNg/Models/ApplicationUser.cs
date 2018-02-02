@@ -8,5 +8,6 @@ namespace DneTrainNg.Models
 {
     public class ApplicationUser:IdentityUser
     {
+        public virtual List<ApplicationToken> ApplicationTokens { get; set; }
     }
 }
