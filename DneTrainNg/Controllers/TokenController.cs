@@ -45,13 +45,13 @@ namespace DneTrainNg.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        [HttpPost("facebookAuth")]
+        [HttpPost("auth/facebook")]
         public async Task<IActionResult> FackbookLogin([FromBody]ExternalLoginViewModel model)
         {
             try
             {
                 var fbApiUrl = Configuration["ExternalAuth:FB:url"];
-                var fbQueryString = String.Format($"me?scope=email&access_token={model.access_token}&field=id,name,email");
+                var fbQueryString = String.Format($"me?scope=email&access_token={model.access_token}&fields=id,name,email");
 
                 string result = null;
                 using (var c = new HttpClient())
@@ -94,17 +94,17 @@ namespace DneTrainNg.Controllers
                         dbContext.SaveChanges();
                     }
 
+                    var ir = await UserManager.AddLoginAsync(user, info);
+                    if (ir.Succeeded)
+                    {
+                        dbContext.SaveChanges();
+                    }
+                    else
+                    {
+                        throw new Exception("Authentication Error");
+                    }
                 }
 
-                var ir = await UserManager.AddLoginAsync(user, info);
-                if (ir.Succeeded)
-                {
-                    dbContext.SaveChanges();
-                }
-                else
-                {
-                    throw new Exception("Authentication Error");
-                }
 
                 var rt = CreateRefreshToken(model.client_id, user.Id);
                 dbContext.ApplicationTokens.Add(rt);
