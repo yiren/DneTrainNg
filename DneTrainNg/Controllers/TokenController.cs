@@ -25,17 +25,20 @@ namespace DneTrainNg.Controllers
         public TokenController(ApplicationDbContext db,
             RoleManager<ApplicationRole> roleManager,
             UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
             IConfiguration configuration)
         {
             dbContext = db;
             RoleManager = roleManager;
             UserManager = userManager;
+            SignInManager = signInManager;
             Configuration = configuration;
         }
 
         protected ApplicationDbContext dbContext { get; private set; }
         protected RoleManager<ApplicationRole> RoleManager { get; private set; }
         protected UserManager<ApplicationUser> UserManager { get; private set; }
+        public SignInManager<ApplicationUser> SignInManager { get; private set; }
         protected IConfiguration Configuration { get; private set; }
 
         // GET: api/Token
@@ -43,6 +46,84 @@ namespace DneTrainNg.Controllers
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
+        }
+
+        [HttpGet("auth/explictflowAuth/{provider}")]
+        public IActionResult FacebookExplicitLogin(string provider, string returnUrl=null)
+        {
+            switch (provider.ToLower())
+            {
+                case "facebook":
+                    var redirectUrl = Url.Action(nameof(ExternalLoginCallBack), "token", new { returnUrl});
+                    var properties = SignInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+                    return Challenge(properties, provider);
+                default:
+                    return BadRequest(new
+                    {
+                        Error = String.Format($"Provider:{provider} is not supported.")
+                    });
+            }
+        }
+
+        [HttpGet("ExternalLoginCallBack")]
+        public async Task<IActionResult> ExternalLoginCallBack(string returnUrl=null, string remoteError = null)
+        {
+            if (!String.IsNullOrEmpty(remoteError))
+            {
+                throw new Exception(String.Format($"External Proivder, ${remoteError}, Has Error"));
+            }
+
+            var info = await SignInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                throw new Exception("ERROR: No Login Info");
+            }
+
+            var user = await UserManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+            if (user == null)
+            {
+                var emailKey = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
+                var email = info.Principal.FindFirst(emailKey).Value;
+                user = await UserManager.FindByEmailAsync(email);
+                if (user == null)
+                {
+                    var idKey = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier";
+                    var userName = String.Format($"{info.LoginProvider}{info.Principal.FindFirst(idKey).Value}{Guid.NewGuid().ToString("N")}");
+                    user = new ApplicationUser
+                    {
+                        SecurityStamp = Guid.NewGuid().ToString(),
+                        UserName = userName,
+                        Email = email
+                    };
+                    await UserManager.CreateAsync(user, email);
+
+                    await UserManager.AddToRoleAsync(user, "user");
+
+                    user.EmailConfirmed = true;
+                    user.LockoutEnabled = false;
+                    await dbContext.SaveChangesAsync();
+
+                    var ir = await UserManager.AddLoginAsync(user, info);
+                    if (ir.Succeeded)
+                    {
+                        dbContext.SaveChanges();
+                    }
+                    else throw new Exception("Authentication Error");
+
+                }
+            }
+            var rt = CreateRefreshToken("DneTraining", user.Id);
+            dbContext.ApplicationTokens.Add(rt);
+            dbContext.SaveChanges();
+
+            var t = CreateAccessToken(user.Id, rt.Value);
+            var res= Content(
+                    "<script>window.opener.externalProviderLogin(" +
+                    JsonConvert.SerializeObject(t) +
+                    ");window.close();" +
+                    "</script>", "text/html"
+                );
+            return res; 
         }
 
         [HttpPost("auth/facebook")]

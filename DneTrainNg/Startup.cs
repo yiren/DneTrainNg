@@ -73,7 +73,16 @@ namespace DneTrainNg
                     //ValidateAudience=true,
                     ValidateIssuerSigningKey = true
                 };
-            });
+            })
+            .AddFacebook(opts =>
+            {
+                opts.AppId = Configuration["ExternalAuth:FB:AppId"];
+                opts.AppSecret = Configuration["ExternalAuth:FB:AppSecret"];
+                //opts.SignInScheme = "facebook";
+                //opts.CallbackPath = "http://localhost:62864/api/token/ExternalLoginCallBack";
+                
+            })
+            ;
 
             services.AddCors(opt =>
             {
