@@ -10,8 +10,8 @@ namespace DneTrainNg.Data.Repository
     public interface ISearchRepository
     {
         string GetDepAverageTrainHour(ReportForAverageTrainHoursViewModel averageVM);
-        IEnumerable<CourseQueryExportViewModel> ExportTrainingRecord(QueryForTrainingRecord queryVM);
-        IEnumerable<Course> SearchCourse(CourseSearchViewModel searchViewModel);
-        IEnumerable<Course> SearchCourseByStudent(CourseSearchByStduentViewModel studentSearchViewModel);
+        IEnumerable<CourseQueryExportViewModel> SearchBySection(QueryForTrainingRecordViewModel queryVM);
+        IEnumerable<Course> SearchCourse(QueryForTrainingRecordViewModel searchViewModel);
+        IEnumerable<CourseQueryExportViewModel> SearchCourseByStudent(QueryForTrainingRecordViewModel studentSearchViewModel);
     }
 }

@@ -11,13 +11,28 @@ namespace DneTrainNg.Models.ViewModel
         public string EndDate { get; set; }
     }
 
-    public class QueryForTrainingRecord
+    public class QueryForTrainingRecordViewModel
     {
-        public string StartDate { get; set; }
-        public string EndDate { get; set; }
+        public string CourseStartDate { get; set; }
+        public string CourseEndDate { get; set; }
         public int? SectionId { get; set; }
+        public string CourseName { get; set; }
+        public string StudentName { get; set; }
+    }
+    public class CourseSearchViewModel
+    {
+        public string CourseName { get; set; }
+        public string CourseStartDate { get; set; }
+        public string CourseEndDate { get; set; }
+
     }
 
+    public class CourseSearchByStduentViewModel
+    {
+        public string StudentName { get; set; }
+        public string CourseStartDate { get; set; }
+        public string CourseEndDate { get; set; }
+    }
     public class CourseQueryExportViewModel
     {
         public string CourseName { get; set; }

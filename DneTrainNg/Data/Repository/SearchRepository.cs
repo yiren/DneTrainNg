@@ -17,20 +17,20 @@ namespace DneTrainNg.Data.Repository
             db = _db;
         }
 
-        public IEnumerable<CourseQueryExportViewModel> ExportTrainingRecord(QueryForTrainingRecord queryVM)
+        public IEnumerable<CourseQueryExportViewModel> SearchBySection(QueryForTrainingRecordViewModel queryVM)
         {
             var queryCourses = db.Courses.AsNoTracking();
             var querySections = db.Sections.AsNoTracking();
             var querySC = db.StudentCourses.AsNoTracking();
 
-            if (!string.IsNullOrEmpty(queryVM.StartDate))
+            if (!string.IsNullOrEmpty(queryVM.CourseStartDate))
             {
-                queryCourses = queryCourses.Where(c=>string.Compare(c.CourseStartDate, queryVM.StartDate) >= 0);
+                queryCourses = queryCourses.Where(c=>string.Compare(c.CourseStartDate, queryVM.CourseStartDate) >= 0);
             }
 
-            if (!string.IsNullOrEmpty(queryVM.EndDate))
+            if (!string.IsNullOrEmpty(queryVM.CourseEndDate))
             {
-                queryCourses = queryCourses.Where(c => string.Compare(queryVM.EndDate, c.CourseEndDate)<=0);
+                queryCourses = queryCourses.Where(c => string.Compare(queryVM.CourseEndDate, c.CourseEndDate)<=0);
             }
 
             if (!(queryVM.SectionId == null))
@@ -59,7 +59,7 @@ namespace DneTrainNg.Data.Repository
                        .ToList();
 
         }
-        public IEnumerable<Course> SearchCourse(CourseSearchViewModel searchViewModel)
+        public IEnumerable<Course> SearchCourse(QueryForTrainingRecordViewModel searchViewModel)
         {
             var c1 = db.Courses.AsNoTracking();
 
@@ -84,7 +84,7 @@ namespace DneTrainNg.Data.Repository
                      .ToList();
         }
 
-        public IEnumerable<Course> SearchCourseByStudent(CourseSearchByStduentViewModel studentSearchViewModel)
+        public IEnumerable<CourseQueryExportViewModel> SearchCourseByStudent(QueryForTrainingRecordViewModel studentSearchViewModel)
         {
             //var s1 = db.Students.Include(s=>s.StudentCourses)
             //                    .ThenInclude(g=>g.Select(d=>d.Course))
@@ -93,13 +93,15 @@ namespace DneTrainNg.Data.Repository
             var data = from s in db.Students.AsNoTracking().Where(s => s.StudentName.Equals(studentSearchViewModel.StudentName))
                        join sc in db.StudentCourses.AsNoTracking() on s.StudentId equals sc.StudentId
                        join c in db.Courses.AsNoTracking() on sc.CourseId equals c.CourseId
-                       select new Course
+                       select new CourseQueryExportViewModel
                        {
-                           CourseId = c.CourseId,
                            CourseName = c.CourseName,
                            CourseStartDate = c.CourseStartDate,
                            CourseEndDate = c.CourseEndDate,
                            TrainHours = c.TrainHours,
+                           StudentName = sc.StudentName,
+                           SectionName = sc.SectionName,
+                           Score = sc.Score
                        };
 
             if (!string.IsNullOrEmpty(studentSearchViewModel.CourseStartDate))

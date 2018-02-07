@@ -30,19 +30,6 @@ namespace DneTrainNg.Models.ViewModel
         public Dictionary<int, string> StudentScoreData { get; set; }
     }
 
-    public class CourseSearchViewModel
-    {
-        public string CourseName { get; set; }
-        public string CourseStartDate { get; set; }
-        public string CourseEndDate { get; set; }
-
-    }
-
-    public class CourseSearchByStduentViewModel
-    {
-        public string StudentName { get; set; }
-        public string CourseStartDate { get; set; }
-        public string CourseEndDate { get; set; }
-    }
+    
 
 }
