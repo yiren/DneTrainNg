@@ -18,6 +18,7 @@ namespace DneTrainNg.Models.ViewModel
         public int? SectionId { get; set; }
         public string CourseName { get; set; }
         public string StudentName { get; set; }
+        public int? QueryOption { get; set; }
     }
     public class CourseSearchViewModel
     {

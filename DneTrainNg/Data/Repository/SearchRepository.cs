@@ -23,6 +23,16 @@ namespace DneTrainNg.Data.Repository
             var querySections = db.Sections.AsNoTracking();
             var querySC = db.StudentCourses.AsNoTracking();
 
+            if (!string.IsNullOrEmpty(queryVM.CourseName))
+            {
+                queryCourses = queryCourses.Where(c => c.CourseName.Contains(queryVM.CourseName));
+            }
+
+            if (!string.IsNullOrEmpty(queryVM.StudentName))
+            {
+                querySC = querySC.Where(c => c.StudentName.Contains(queryVM.StudentName));
+            }
+
             if (!string.IsNullOrEmpty(queryVM.CourseStartDate))
             {
                 queryCourses = queryCourses.Where(c=>string.Compare(c.CourseStartDate, queryVM.CourseStartDate) >= 0);
@@ -52,11 +62,31 @@ namespace DneTrainNg.Data.Repository
                          Score=sc.Score
                      };
 
-            return data.OrderByDescending(d=>d.SectionName)
-                       .ThenByDescending(d=>d.StudentName)
-                       .ThenByDescending(d=>d.CourseStartDate)
-                       .ThenByDescending(d=>d.CourseEndDate)
+            switch (queryVM.QueryOption)
+            {
+                case 0:
+                    return data.OrderByDescending(d => d.SectionName)
+                       .ThenByDescending(d => d.StudentName)
+                       .ThenByDescending(d => d.CourseStartDate)
+                       .ThenByDescending(d => d.CourseEndDate)
                        .ToList();
+
+                // For 依課程搜尋 Export
+                case 1:
+                    return data
+                       .OrderByDescending(d => d.CourseStartDate)
+                       .ThenByDescending(d => d.CourseEndDate)
+                       .ToList();
+               
+                default:
+                    return data.OrderByDescending(d => d.SectionName)
+                       .ThenByDescending(d => d.StudentName)
+                       .ThenByDescending(d => d.CourseStartDate)
+                       .ThenByDescending(d => d.CourseEndDate)
+                       .ToList();
+            }
+
+            
 
         }
         public IEnumerable<Course> SearchCourse(QueryForTrainingRecordViewModel searchViewModel)
