@@ -52,8 +52,6 @@ namespace DneTrainNg.Data.SeedData
                 await userManager.AddToRoleAsync(user_admin, general_user);
             }
 
-            
-
             await db.SaveChangesAsync();
         }
 

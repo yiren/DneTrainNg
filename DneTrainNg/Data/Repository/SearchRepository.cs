@@ -158,17 +158,17 @@ namespace DneTrainNg.Data.Repository
 
             if (!string.IsNullOrEmpty(averageVM.StartDate) || !string.IsNullOrEmpty(averageVM.EndDate))
             {
-                var startDate = Convert.ToDateTime(averageVM.StartDate);
-                var endDate = Convert.ToDateTime(averageVM.EndDate);
+                
+                
 
                 var queriedCourses = db.Courses.AsNoTracking();
 
-                if (endDate < startDate)
+                if (String.Compare(averageVM.EndDate , averageVM.StartDate)<=0)
                 {
                     return "結束日期大於起始日期";
                 }
 
-                queriedCourses = queriedCourses.Where(c => Convert.ToDateTime(c.CourseStartDate) >= startDate && Convert.ToDateTime(c.CourseEndDate) <= endDate);
+                queriedCourses = queriedCourses.Where(c => String.Compare(c.CourseStartDate, averageVM.StartDate)>=0 && String.Compare(averageVM.EndDate, c.CourseEndDate)>=0);
                 double totalHours = 0;
 
                 foreach (var course in queriedCourses)
