@@ -37,11 +37,11 @@ namespace DneTrainNg.Controllers
         
 
         [HttpPost("searchbycourse")]
-        public IEnumerable<Course> SearchCourse([FromBody]QueryForTrainingRecordViewModel searchViewModel)=>repo.SearchCourse(searchViewModel);
+        public IEnumerable<Course> SearchCourse([FromBody]QueryForTrainingRecordViewModel queryVM) =>repo.SearchCourse(queryVM);
         
 
         [HttpPost("searchbystudent")]
-        public IEnumerable<CourseQueryExportViewModel> SearchCourseByStudent([FromBody] QueryForTrainingRecordViewModel searchViewModel)=>repo.SearchCourseByStudent(searchViewModel);
+        public IEnumerable<CourseQueryExportViewModel> SearchCourseByStudent([FromBody] QueryForTrainingRecordViewModel queryVM) =>repo.SearchBySection(queryVM);
         
 
         // GET: api/ReportData/5

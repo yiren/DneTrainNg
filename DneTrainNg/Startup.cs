@@ -69,7 +69,7 @@ namespace DneTrainNg
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Auth:Jwt:Key"])),
                     ClockSkew = TimeSpan.Zero,
                     RequireExpirationTime = true,
-                    ValidateIssuer = true,
+                    //ValidateIssuer = true,
                     //ValidateAudience=true,
                     ValidateIssuerSigningKey = true
                 };

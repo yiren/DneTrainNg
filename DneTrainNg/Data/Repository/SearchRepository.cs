@@ -3,6 +3,7 @@ using DneTrainNg.Models.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,48 +20,58 @@ namespace DneTrainNg.Data.Repository
 
         public IEnumerable<CourseQueryExportViewModel> SearchBySection(QueryForTrainingRecordViewModel queryVM)
         {
-            var queryCourses = db.Courses.AsNoTracking();
+             
             var querySections = db.Sections.AsNoTracking();
-            var querySC = db.StudentCourses.AsNoTracking();
+            
+            var data = from c in db.Courses.AsNoTracking()
+                       join sc in db.StudentCourses.AsNoTracking() on c.CourseId equals sc.CourseId
+                       select new CourseQueryExportViewModel
+                       {
+                           CourseName = c.CourseName,
+                           CourseStartDate = c.CourseStartDate,
+                           CourseEndDate = c.CourseEndDate,
+                           TrainHours = c.TrainHours,
+                           StudentName = sc.StudentName,
+                           SectionName = sc.SectionName,
+                           Score = sc.Score,
+                           StudentId=sc.StudentId
+                       };
+            //var startDate = DateTime.ParseExact(queryVM.CourseStartDate, "yyyy/MM/dd", CultureInfo.InvariantCulture);
+            //var endDate = DateTime.ParseExact(queryVM.CourseEndDate, "yyyy/MM/dd", CultureInfo.InvariantCulture);
 
             if (!string.IsNullOrEmpty(queryVM.CourseName))
             {
-                queryCourses = queryCourses.Where(c => c.CourseName.Contains(queryVM.CourseName));
+                data = data.Where(c => c.CourseName.Contains(queryVM.CourseName));
             }
 
             if (!string.IsNullOrEmpty(queryVM.StudentName))
             {
-                querySC = querySC.Where(c => c.StudentName.Contains(queryVM.StudentName));
+                data = data.Where(c => c.StudentName.Contains(queryVM.StudentName));
             }
 
             if (!string.IsNullOrEmpty(queryVM.CourseStartDate))
             {
-                queryCourses = queryCourses.Where(c=>string.Compare(c.CourseStartDate, queryVM.CourseStartDate) >= 0);
+                data = data.Where(c=>string.Compare(c.CourseStartDate, queryVM.CourseStartDate) >= 0);
+                //queryCourses = queryCourses.Where(c=>string.Compare(queryVM.CourseStartDate, c.CourseEndDate) <= 0);
             }
 
             if (!string.IsNullOrEmpty(queryVM.CourseEndDate))
             {
-                queryCourses = queryCourses.Where(c => string.Compare(queryVM.CourseEndDate, c.CourseEndDate)<=0);
+                data = data.Where(c => string.Compare(queryVM.CourseEndDate, c.CourseEndDate) >= 0);
             }
 
             if (!(queryVM.SectionId == null))
             {
                 var section = querySections.SingleOrDefault(s => s.SectionId == queryVM.SectionId);
-                querySC = querySC.Where(sc => sc.SectionCode.Equals(section.SectionCode));
+                data = data.Where(c=>c.SectionName.Equals(section.SectionName));
             }
 
-            var data=from c in queryCourses
-                     join sc in querySC on c.CourseId equals sc.CourseId
-                     select new CourseQueryExportViewModel
-                     {
-                         CourseName = c.CourseName,
-                         CourseStartDate= c.CourseStartDate,
-                         CourseEndDate= c.CourseEndDate,
-                         TrainHours= c.TrainHours,
-                         StudentName=sc.StudentName,
-                         SectionName=sc.SectionName,
-                         Score=sc.Score
-                     };
+            if (!(queryVM.StudentId == null))
+            {
+                data = data.Where(c => c.StudentId==queryVM.StudentId);
+            }
+
+            
 
             switch (queryVM.QueryOption)
             {
@@ -105,7 +116,7 @@ namespace DneTrainNg.Data.Repository
 
             if (!string.IsNullOrEmpty(searchViewModel.CourseEndDate))
             {
-                c1 = c1.Where(c=>string.Compare(searchViewModel.CourseEndDate,c.CourseEndDate) <= 0);
+                c1 = c1.Where(c=>string.Compare(searchViewModel.CourseEndDate,c.CourseEndDate) >= 0);
             }
 
             return c1.Include(c => c.StudentCourses)
@@ -141,7 +152,7 @@ namespace DneTrainNg.Data.Repository
 
             if (!string.IsNullOrEmpty(studentSearchViewModel.CourseEndDate))
             {
-                data = data.Where(c => string.Compare(studentSearchViewModel.CourseEndDate, c.CourseEndDate) <= 0);
+                data = data.Where(c => string.Compare(studentSearchViewModel.CourseEndDate, c.CourseEndDate) >= 0);
             }
 
             return data.OrderByDescending(c => c.CourseStartDate).ThenByDescending(c => c.CourseEndDate).ToList();
@@ -168,7 +179,7 @@ namespace DneTrainNg.Data.Repository
                     return "結束日期大於起始日期";
                 }
 
-                queriedCourses = queriedCourses.Where(c => String.Compare(c.CourseStartDate, averageVM.StartDate)>=0 && String.Compare(averageVM.EndDate, c.CourseEndDate)>=0);
+                queriedCourses = queriedCourses.Where(c => String.Compare(c.CourseStartDate, averageVM.StartDate)>=0 && String.Compare(averageVM.EndDate, c.CourseEndDate)<=0);
                 double totalHours = 0;
 
                 foreach (var course in queriedCourses)

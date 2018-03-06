@@ -12,7 +12,7 @@ namespace DneTrainNg.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     public class SampleDataController : Controller
     {
         private static string[] Summaries = new[]
@@ -29,6 +29,11 @@ namespace DneTrainNg.Controllers
         [HttpGet]
         public IEnumerable<string> GetSimpleData()
         {
+            if (User == null)
+            {
+                return new List<string>() { "Not Authorized"};
+             
+            }
             var userId=User.FindFirst(ClaimTypes.NameIdentifier).Value;
             foreach (var claim in User.Claims)
             {

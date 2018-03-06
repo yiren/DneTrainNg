@@ -326,7 +326,7 @@ namespace DneTrainNg.Controllers
         [HttpPost("Auth")]
         public async Task<IActionResult> GetToken([FromBody]TokenRequestViewModel model)
         {
-            switch (model.grand_type)
+            switch (model.grant_type)
             {
                 case "password":
                     return await GetAccessToken(model);
