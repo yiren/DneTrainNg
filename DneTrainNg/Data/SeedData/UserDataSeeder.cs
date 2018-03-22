@@ -36,22 +36,38 @@ namespace DneTrainNg.Data.SeedData
                 await roleManager.CreateAsync(new ApplicationRole(general_user));
             }
 
-            var user_admin = new ApplicationUser
+            var train_admin = new ApplicationUser
             {
                 UserName = "dnetrainadmin",
-                Email = "admin@nedtpc.com.tw",
+                Email = "trainadmin@nedtpc.com.tw",
+                EmailConfirmed = true,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                LockoutEnabled = false
+            };
+            var vote_admin = new ApplicationUser
+            {
+                UserName = "admin",
+                Email = "voteadmin@nedtpc.com.tw",
                 EmailConfirmed = true,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 LockoutEnabled = false
             };
 
-            if (await userManager.FindByNameAsync(user_admin.UserName) == null)
+
+
+            if (await userManager.FindByNameAsync(train_admin.UserName) == null)
             {
-                await userManager.CreateAsync(user_admin, "DneTrainAa1234");
-                await userManager.AddToRoleAsync(user_admin, admin_role);
-                await userManager.AddToRoleAsync(user_admin, general_user);
+                await userManager.CreateAsync(train_admin, "test");
+                await userManager.AddToRoleAsync(train_admin, admin_role);
+                await userManager.AddToRoleAsync(train_admin, general_user);
             }
 
+            if (await userManager.FindByNameAsync(vote_admin.UserName) == null)
+            {
+                await userManager.CreateAsync(vote_admin, "1qaz@WSX");
+                await userManager.AddToRoleAsync(vote_admin, admin_role);
+                await userManager.AddToRoleAsync(vote_admin, general_user);
+            }
             await db.SaveChangesAsync();
         }
 

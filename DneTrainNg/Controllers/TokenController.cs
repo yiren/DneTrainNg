@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DneTrainNg.Models;
 using DneTrainNg.Models.ViewModel;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,7 @@ namespace DneTrainNg.Controllers
 {
     [Produces("application/json")]
     [Route("api/Token")]
-    
+    [EnableCors("angular")]
     public class TokenController : Controller
     {
         public TokenController(ApplicationDbContext db,
@@ -98,9 +99,10 @@ namespace DneTrainNg.Controllers
                     await UserManager.CreateAsync(user, email);
 
                     await UserManager.AddToRoleAsync(user, "user");
-
+                    
                     user.EmailConfirmed = true;
                     user.LockoutEnabled = false;
+                    
                     await dbContext.SaveChangesAsync();
 
                     var ir = await UserManager.AddLoginAsync(user, info);
@@ -115,8 +117,8 @@ namespace DneTrainNg.Controllers
             var rt = CreateRefreshToken("DneTraining", user.Id);
             dbContext.ApplicationTokens.Add(rt);
             dbContext.SaveChanges();
-
-            var t = CreateAccessToken(user.Id, rt.Value);
+            var roles =await UserManager.GetRolesAsync(user);
+            var t = CreateAccessToken(user.Id, roles, rt.Value);
             var res= Content(
                     "<script>window.opener.externalProviderLogin(" +
                     JsonConvert.SerializeObject(t) +
@@ -176,6 +178,7 @@ namespace DneTrainNg.Controllers
                     }
 
                     var ir = await UserManager.AddLoginAsync(user, info);
+                    
                     if (ir.Succeeded)
                     {
                         dbContext.SaveChanges();
@@ -185,13 +188,13 @@ namespace DneTrainNg.Controllers
                         throw new Exception("Authentication Error");
                     }
                 }
-
+                var roles = await UserManager.GetRolesAsync(user);
 
                 var rt = CreateRefreshToken(model.client_id, user.Id);
                 dbContext.ApplicationTokens.Add(rt);
                 dbContext.SaveChanges();
 
-                var t = CreateAccessToken(user.Id, rt.Value);
+                var t = CreateAccessToken(user.Id, roles, rt.Value);
                 return Json(t);
             }
             catch (Exception ex)
@@ -217,18 +220,11 @@ namespace DneTrainNg.Controllers
                 }
                 var roles = await UserManager.GetRolesAsync(user);
                 //var roleClaims=new List<string>();
-                Claim[] roleClaims;
-
-                StringBuilder sb = new StringBuilder();
-                foreach (var role in roles)
-                {
-                    //roleClaims.Add(new Claim(JwtRegisteredClaimNames.ro role));
-                }
-
+               
                 var refreshToken = CreateRefreshToken(model.client_id, user.Id);
                 dbContext.ApplicationTokens.Add(refreshToken);
                 dbContext.SaveChanges();
-                var response = CreateAccessToken(user.Id, refreshToken.Value);
+                var response = CreateAccessToken(user.Id, roles, refreshToken.Value);
                 return Json(response);
             }
             catch (Exception e)
@@ -249,16 +245,22 @@ namespace DneTrainNg.Controllers
             };
         }
 
-        private TokenResponseViewModel CreateAccessToken(string userId, string refreshToken)
+        private TokenResponseViewModel CreateAccessToken(string userId, IList<string> roles, string refreshToken)
         {
             
-            var claims = new[]
+            var claims = new List<Claim>
             {
                     new Claim(JwtRegisteredClaimNames.Sub, userId),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString())
 
-                };
+            };
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim("roles",role));
+            }
+            
 
             var issuerSigninKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(Configuration["Auth:Jwt:Key"]));
@@ -298,7 +300,7 @@ namespace DneTrainNg.Controllers
                     return new UnauthorizedResult();
                 }
 
-                var user = UserManager.FindByIdAsync(rt.UserId);
+                var user = await UserManager.FindByIdAsync(rt.UserId);
                 if (user == null)
                 {
                     return new UnauthorizedResult();
@@ -309,7 +311,8 @@ namespace DneTrainNg.Controllers
                 dbContext.ApplicationTokens.Remove(rt);
                 dbContext.ApplicationTokens.Add(rtNew);
                 dbContext.SaveChanges();
-                var response = CreateAccessToken(rtNew.UserId, rtNew.ClientId);
+                var roles = await UserManager.GetRolesAsync(user);
+                var response = CreateAccessToken(rtNew.UserId, roles, rtNew.ClientId);
                 return Json(response);
                 //return new UnauthorizedResult(); 
             }

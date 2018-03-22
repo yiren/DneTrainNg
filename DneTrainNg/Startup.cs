@@ -120,7 +120,7 @@ namespace DneTrainNg
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-            app.UseCors("Angular");
+            app.UseCors("angular");
             app.UseStaticFiles();
 
 

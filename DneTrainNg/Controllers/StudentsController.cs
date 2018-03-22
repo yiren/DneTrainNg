@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DneTrainNg.Data.Repository;
 using DneTrainNg.Models;
 using DneTrainNg.Models.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +13,7 @@ namespace DneTrainNg.Controllers
 {
     [Produces("application/json")]
     [Route("api/Students")]
+    [Authorize]
     public class StudentsController : Controller
     {
         private readonly IStudentRepository repo;
@@ -22,6 +24,7 @@ namespace DneTrainNg.Controllers
         }
         // GET: api/Students
         [HttpGet]
+        [AllowAnonymous]
         public IEnumerable<Student> Get()
         {
             return repo.GetStudents();

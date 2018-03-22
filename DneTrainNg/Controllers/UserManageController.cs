@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DneTrainNg.Models;
 using DneTrainNg.Models.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ namespace DneTrainNg.Controllers
 {
     [Produces("application/json")]
     [Route("api/UserManage")]
+    [Authorize]
     public class UserManageController : Controller
     {
         private readonly ApplicationDbContext db;

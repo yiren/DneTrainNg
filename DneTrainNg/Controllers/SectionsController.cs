@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DneTrainNg.Data.Repository;
 using DneTrainNg.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ namespace DneTrainNg.Controllers
     [Produces("application/json")]
     [Route("api/Sections")]
     [EnableCors("angular")]
+    [Authorize]
     public class SectionsController : Controller
     {
         private readonly ISectionRepository repo;
@@ -30,6 +32,7 @@ namespace DneTrainNg.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IEnumerable<Section> GetSections()
         {
             return repo.GetSections();
