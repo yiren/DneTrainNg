@@ -31,17 +31,17 @@ namespace DneTrainNg.Controllers
         public string GetAverageTrainHours([FromBody]ReportForAverageTrainHoursViewModel averageVM)=>repo.GetDepAverageTrainHour(averageVM);
         
 
-        [HttpPost("searchbysection")]
-        public IEnumerable<CourseQueryExportViewModel> ExportTrainingRecord([FromBody]QueryForTrainingRecordViewModel queryVM)=>repo.SearchBySection(queryVM);
+        [HttpGet("searchbysection")]
+        public IEnumerable<CourseQueryExportViewModel> ExportTrainingRecord([FromQuery]QueryForTrainingRecordViewModel queryVM)=>repo.SearchBySection(queryVM);
 
         
 
-        [HttpPost("searchbycourse")]
-        public IEnumerable<Course> SearchCourse([FromBody]QueryForTrainingRecordViewModel queryVM) =>repo.SearchCourse(queryVM);
+        [HttpGet("searchbycourse")]
+        public IEnumerable<Course> SearchCourse([FromQuery]QueryForTrainingRecordViewModel queryVM) =>repo.SearchCourse(queryVM);
         
 
-        [HttpPost("searchbystudent")]
-        public IEnumerable<CourseQueryExportViewModel> SearchCourseByStudent([FromBody] QueryForTrainingRecordViewModel queryVM) =>repo.SearchBySection(queryVM);
+        [HttpGet("searchbystudent")]
+        public IEnumerable<CourseQueryExportViewModel> SearchCourseByStudent([FromQuery] QueryForTrainingRecordViewModel queryVM) =>repo.SearchBySection(queryVM);
         
 
         // GET: api/ReportData/5
