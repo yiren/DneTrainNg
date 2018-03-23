@@ -9,12 +9,13 @@ namespace DneTrainNg.Data.Repository
 {
     public interface ICourseRepository
     {
-        Task<List<Course>> GetCourseList();
+        List<Course> GetCourseList();
         Course AddCourse(CourseChangeViewModel course);
         Course UpdateCourse(Guid id, CourseChangeViewModel course);
         Boolean DeleteCourse(Guid id);
         Course GetCourseDetailById(Guid courseId);
         IEnumerable<StudentCourse> UpdateScore(Guid courseId, CourseScoreViewModel scoreData);
         IEnumerable<StudentCourse> GetStudentCoursesById(Guid courseId);
+        List<Course> GetPaginatedCourses(PaginatedCoursesViewModel p);
     }
 }

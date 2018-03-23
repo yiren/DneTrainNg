@@ -30,6 +30,11 @@ namespace DneTrainNg.Models.ViewModel
         public Dictionary<int, string> StudentScoreData { get; set; }
     }
 
-    
+    public class PaginatedCoursesViewModel
+    {
+        public int PageIndex { get; set; }
+        public int PageSize { get; set; }
+        public string Keyword { get; set; }
+    }
 
 }

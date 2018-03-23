@@ -29,20 +29,29 @@ namespace DneTrainNg.Controllers
         // GET: api/Courses
         [HttpGet]
         [AllowAnonymous]
-        public Task<List<Course>> GetCourses()
+        public List<Course> GetCourses()
         {
             return repo.GetCourseList();
         }
 
-        [HttpGet("getvalues")]
-        public string[] GetValues()
+        
+
+        [HttpPost("getpaginatedcourses")]
+        [AllowAnonymous]
+        public IActionResult GetPaginatedCourses([FromBody]PaginatedCoursesViewModel p)
         {
-            return new string[]{"v1","v2"
+            var queryData= repo.GetPaginatedCourses(p);
+            var res = new
+            {
+                Courses = queryData,
+                RecordCount = repo.GetCourseList().Count
             };
+            return Ok(res);
         }
 
         // GET: api/Courses/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public Course GetCourseById([FromRoute] Guid id)
         {
             return repo.GetCourseDetailById(id);

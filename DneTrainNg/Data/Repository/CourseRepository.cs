@@ -73,9 +73,26 @@ namespace DneTrainNg.Data.Repository
                              .FirstOrDefault(c => c.CourseId.Equals(courseId));
         }
 
-        public Task<List<Course>> GetCourseList()
+        public List<Course> GetCourseList()
         {
-            return db.Courses.AsNoTracking().OrderByDescending(c => c.CourseStartDate).ThenByDescending(c=>c.CourseEndDate).ToListAsync();
+            return GetCourses().ToList();
+        }
+
+        public IQueryable<Course> GetCourses()
+        {
+            return db.Courses.AsNoTracking().OrderByDescending(c => c.CourseStartDate).ThenByDescending(c => c.CourseEndDate);
+        }
+
+        public List<Course> GetPaginatedCourses(PaginatedCoursesViewModel p)
+        {
+            if (String.IsNullOrEmpty(p.Keyword)){
+                return GetCourses().Skip(p.PageSize * p.PageIndex).Take(p.PageSize).ToList();
+            }
+            else
+            {
+                return GetCourses().Where(c=>c.CourseName.ToLower().Contains(p.Keyword)).Skip(p.PageSize * p.PageIndex).Take(p.PageSize).ToList();
+            }
+            
         }
 
         public IEnumerable<StudentCourse> GetStudentCoursesById(Guid courseId)
