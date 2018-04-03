@@ -9,6 +9,7 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		DebugForVS|Any CPU = DebugForVS|Any CPU
+		MS_NPP_Trainning|Any CPU = MS_NPP_Trainning|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
@@ -16,6 +17,8 @@ Global
 		{4FFED2A6-1824-49C3-892A-9C75CD781C91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FFED2A6-1824-49C3-892A-9C75CD781C91}.DebugForVS|Any CPU.ActiveCfg = DebugForVS|Any CPU
 		{4FFED2A6-1824-49C3-892A-9C75CD781C91}.DebugForVS|Any CPU.Build.0 = DebugForVS|Any CPU
+		{4FFED2A6-1824-49C3-892A-9C75CD781C91}.MS_NPP_Trainning|Any CPU.ActiveCfg = MS_NPP_Trainning|Any CPU
+		{4FFED2A6-1824-49C3-892A-9C75CD781C91}.MS_NPP_Trainning|Any CPU.Build.0 = MS_NPP_Trainning|Any CPU
 		{4FFED2A6-1824-49C3-892A-9C75CD781C91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FFED2A6-1824-49C3-892A-9C75CD781C91}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

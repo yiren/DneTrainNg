@@ -74,14 +74,14 @@ namespace DneTrainNg
                     ValidateIssuerSigningKey = true
                 };
             })
-            .AddFacebook(opts =>
-            {
-                opts.AppId = Configuration["ExternalAuth:FB:AppId"];
-                opts.AppSecret = Configuration["ExternalAuth:FB:AppSecret"];
-                //opts.SignInScheme = "facebook";
-                //opts.CallbackPath = "http://localhost:62864/api/token/ExternalLoginCallBack";
+            //.AddFacebook(opts =>
+            //{
+            //    opts.AppId = Configuration["ExternalAuth:FB:AppId"];
+            //    opts.AppSecret = Configuration["ExternalAuth:FB:AppSecret"];
+            //    //opts.SignInScheme = "facebook";
+            //    //opts.CallbackPath = "http://localhost:62864/api/token/ExternalLoginCallBack";
                 
-            })
+            //})
             ;
 
             services.AddCors(opt =>
@@ -107,10 +107,12 @@ namespace DneTrainNg
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, TrainingDbContext context)
         {
+            
             //TrainingSeedData.Initialize(context);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            
                 //app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
                 //{
                 //    HotModuleReplacement = true

@@ -18,7 +18,7 @@ namespace DneTrainNg
         public static void Main(string[] args)
         {
             var host=BuildWebHost(args);
-
+            
             //using (var scope=host.Services.CreateScope())
             //{
             //    var services = scope.ServiceProvider;
@@ -40,6 +40,14 @@ namespace DneTrainNg
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                //.ConfigureAppConfiguration((hostContext, config) =>
+                //{
+                //    config.Sources.Clear();
+                //    config.AddJsonFile("appsettings.json", optional: true);
+                //    config.AddJsonFile($"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json", optional: true);
+                //    config.AddEnvironmentVariables();
+                //})
+
                 .Build();
     }
 }

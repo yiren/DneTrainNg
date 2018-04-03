@@ -169,20 +169,31 @@ namespace DneTrainNg.Data.Repository
 
             if (!string.IsNullOrEmpty(averageVM.StartDate) || !string.IsNullOrEmpty(averageVM.EndDate))
             {
-                
-                
 
-                var queriedCourses = db.Courses.AsNoTracking();
+                var queriedCourses = from c in db.Courses.AsNoTracking()
+                                     join sc in db.StudentCourses.AsNoTracking() on c.CourseId equals sc.CourseId
+                                     select new CourseQueryExportViewModel
+                                     {
+                                         CourseName = c.CourseName,
+                                         CourseStartDate = c.CourseStartDate,
+                                         CourseEndDate = c.CourseEndDate,
+                                         TrainHours = c.TrainHours,
+                                         StudentName = sc.StudentName,
+                                         SectionName = sc.SectionName,
+                                         Score = sc.Score,
+                                         StudentId = sc.StudentId
+                                     };
 
                 if (String.Compare(averageVM.EndDate , averageVM.StartDate)<=0)
                 {
                     return "結束日期大於起始日期";
                 }
 
-                queriedCourses = queriedCourses.Where(c => String.Compare(c.CourseStartDate, averageVM.StartDate)>=0 && String.Compare(averageVM.EndDate, c.CourseEndDate)<=0);
+                queriedCourses = queriedCourses.Where(c => String.Compare(c.CourseStartDate, averageVM.StartDate)>=0);
+                queriedCourses = queriedCourses.Where(c => String.Compare(averageVM.EndDate, c.CourseEndDate) >= 0);
                 double totalHours = 0;
 
-                foreach (var course in queriedCourses)
+                foreach (var course in queriedCourses.ToList())
                 {
                     totalHours += course.TrainHours;
                 }
