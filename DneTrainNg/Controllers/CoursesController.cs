@@ -16,7 +16,7 @@ namespace DneTrainNg.Controllers
     [Produces("application/json")]
     [Route("api/Courses")]
     
-    [Authorize]
+    //[Authorize]
     public class CoursesController : Controller
     {
         private readonly ICourseRepository repo;
@@ -44,7 +44,7 @@ namespace DneTrainNg.Controllers
             var res = new
             {
                 Courses = queryData,
-                RecordCount = repo.GetCourseList().Count
+                RecordCount = queryData.Count
             };
             return Ok(res);
         }

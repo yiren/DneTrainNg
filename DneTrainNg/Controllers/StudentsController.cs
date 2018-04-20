@@ -13,7 +13,7 @@ namespace DneTrainNg.Controllers
 {
     [Produces("application/json")]
     [Route("api/Students")]
-    [Authorize]
+    //[Authorize]
     public class StudentsController : Controller
     {
         private readonly IStudentRepository repo;

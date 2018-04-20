@@ -15,7 +15,7 @@ namespace DneTrainNg.Controllers
     [Produces("application/json")]
     [Route("api/Sections")]
     [EnableCors("angular")]
-    [Authorize]
+    //[Authorize]
     public class SectionsController : Controller
     {
         private readonly ISectionRepository repo;
