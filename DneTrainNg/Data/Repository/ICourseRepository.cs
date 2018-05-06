@@ -17,5 +17,6 @@ namespace DneTrainNg.Data.Repository
         IEnumerable<StudentCourse> UpdateScore(Guid courseId, CourseScoreViewModel scoreData);
         IEnumerable<StudentCourse> GetStudentCoursesById(Guid courseId);
         List<Course> GetPaginatedCourses(PaginatedCoursesViewModel p);
+        Course UpdateMapperCourse(Course courseToDb);
     }
 }

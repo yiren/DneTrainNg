@@ -10,6 +10,8 @@ using DneTrainNg.Data.Repository;
 using DneTrainNg.Models.ViewModel;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
+using DneTrainNg.Data.APIResources;
 
 namespace DneTrainNg.Controllers
 {
@@ -20,18 +22,23 @@ namespace DneTrainNg.Controllers
     public class CoursesController : Controller
     {
         private readonly ICourseRepository repo;
+        private readonly IMapper mapper;
 
-        public CoursesController(ICourseRepository _repo)
+        public CoursesController(ICourseRepository _repo, IMapper _mapper)
         {
             repo = _repo;
+            mapper = _mapper;
         }
 
         // GET: api/Courses
         [HttpGet]
         [AllowAnonymous]
-        public List<Course> GetCourses()
+        public List<CourseListResource> GetCourses()
         {
-            return repo.GetCourseList();
+            var courses = repo.GetCourseList();
+
+            return mapper.Map<List<Course>, List<CourseListResource>>(courses);
+            //return repo.GetCourseList();
         }
 
         
@@ -52,21 +59,32 @@ namespace DneTrainNg.Controllers
         // GET: api/Courses/5
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public Course GetCourseById([FromRoute] Guid id)
+        public CourseResource GetCourseById([FromRoute] Guid id)
         {
-            return repo.GetCourseDetailById(id);
+
+            return mapper.Map<Course, CourseResource>(repo.GetCourseDetailById(id));
         }
 
         // PUT: api/Courses/5
         [HttpPut("{id}")]
-        public IActionResult PutCourse([FromRoute] Guid id, [FromBody] CourseChangeViewModel course)
+        public IActionResult PutCourse([FromRoute] Guid id, [FromBody] CourseChangeViewModel courseToUpdate)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            return Ok(repo.UpdateCourse(id, course));
+            var course = repo.GetCourseDetailById(id);
+            if (course==null)
+            {
+                ModelState.AddModelError("error", "無法更新，請確認填入資訊是否正確");
+                return BadRequest(ModelState);
+            }
+            var courseToDb = mapper.Map<CourseChangeViewModel, Course>(courseToUpdate,course);
+            var result = repo.UpdateMapperCourse(courseToDb);
+
+            return Ok(result);
+            //return Ok(repo.UpdateCourse(id, course));
         }
 
         // POST: api/Courses
