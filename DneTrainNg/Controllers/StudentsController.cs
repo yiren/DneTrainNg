@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using DneTrainNg.Data.APIResources;
 using DneTrainNg.Data.Repository;
 using DneTrainNg.Models;
 using DneTrainNg.Models.ViewModel;
@@ -17,10 +19,12 @@ namespace DneTrainNg.Controllers
     public class StudentsController : Controller
     {
         private readonly IStudentRepository repo;
+        private readonly IMapper mapper;
 
-        public StudentsController(IStudentRepository _repo)
+        public StudentsController(IStudentRepository _repo, IMapper mapper)
         {
             repo = _repo;
+            this.mapper = mapper;
         }
         // GET: api/Students
         [HttpGet]
@@ -32,9 +36,10 @@ namespace DneTrainNg.Controllers
 
         // GET: api/Students/5
         [HttpGet("{id}")]
-        public Student GetStudentById(int id)
+        public StudentResource GetStudentById(int id)
         {
-            return repo.GetStudentById(id);
+
+            return mapper.Map<Student, StudentResource>(repo.GetStudentById(id));
         }
         
         // POST: api/Students

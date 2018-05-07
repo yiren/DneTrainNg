@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using DneTrainNg.Data.Mapper;
 using DneTrainNg.Data.Repository;
 using DneTrainNg.Data.SeedData;
 using DneTrainNg.Models;
@@ -40,6 +42,8 @@ namespace DneTrainNg
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddAutoMapper(a=>a.AddProfile(new MappingProfile()));
 
             services.Configure<IdentityOptions>(opt =>
             {

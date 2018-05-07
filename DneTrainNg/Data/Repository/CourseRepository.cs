@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using DneTrainNg.Models;
 using DneTrainNg.Models.ViewModel;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +12,12 @@ namespace DneTrainNg.Data.Repository
     public class CourseRepository : ICourseRepository
     {
         private readonly TrainingDbContext db;
+        private readonly IMapper mapper;
 
-        public CourseRepository(TrainingDbContext _context)
+        public CourseRepository(TrainingDbContext _context, IMapper mapper)
         {
             db = _context;
+            this.mapper = mapper;
         }
 
         public Course AddCourse(CourseChangeViewModel course)
@@ -161,6 +164,24 @@ namespace DneTrainNg.Data.Repository
             
         }
 
+        public Course UpdateMapperCourse(Course courseToDb)
+        {
+            var updatedStudentCourses = new List<StudentCourse>();
+            foreach (var student in courseToDb.StudentCourses)
+            {
+                var dbStudent = db.Students.Find(student.StudentId);
+               updatedStudentCourses.Add(mapper.Map<Student, StudentCourse>(dbStudent, student));
+            }
+
+            courseToDb.StudentCourses = updatedStudentCourses;
+            db.Courses.Update(courseToDb);
+            db.SaveChanges();
+            return db.Courses.AsNoTracking().Include(c => c.StudentCourses).FirstOrDefault(c => c.CourseId.Equals(courseToDb.CourseId));
+            //return courseToDb;
+        }
+
+        
+        
         public IEnumerable<StudentCourse> UpdateScore(Guid courseId, CourseScoreViewModel scoreData)
         {
             var dbStudentCourses = db.StudentCourses.Where(sc => sc.CourseId.Equals(courseId));
