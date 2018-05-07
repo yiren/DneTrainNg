@@ -41,12 +41,8 @@ namespace DneTrainNg.Controllers
         public IActionResult GetPaginatedCourses([FromBody]PaginatedCoursesViewModel p)
         {
             var queryData= repo.GetPaginatedCourses(p);
-            var res = new
-            {
-                Courses = queryData,
-                RecordCount = queryData.Count
-            };
-            return Ok(res);
+            
+            return Ok(queryData);
         }
 
         // GET: api/Courses/5

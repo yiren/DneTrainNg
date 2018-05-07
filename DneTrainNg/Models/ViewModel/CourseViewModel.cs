@@ -36,5 +36,10 @@ namespace DneTrainNg.Models.ViewModel
         public int PageSize { get; set; }
         public string Keyword { get; set; }
     }
+    public class PaginatedCoursesResultViewModel
+    {
+        public List<Course> Courses {get;set;}
+        public int RecordCount { get; set; }
+    }
 
 }

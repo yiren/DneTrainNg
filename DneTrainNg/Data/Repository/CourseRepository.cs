@@ -83,14 +83,23 @@ namespace DneTrainNg.Data.Repository
             return db.Courses.AsNoTracking().OrderByDescending(c => c.CourseStartDate).ThenByDescending(c => c.CourseEndDate);
         }
 
-        public List<Course> GetPaginatedCourses(PaginatedCoursesViewModel p)
+        public PaginatedCoursesResultViewModel GetPaginatedCourses(PaginatedCoursesViewModel p)
         {
+            var queryResult=GetCourses();
             if (String.IsNullOrEmpty(p.Keyword)){
-                return GetCourses().Skip(p.PageSize * p.PageIndex).Take(p.PageSize).ToList();
+                return new PaginatedCoursesResultViewModel
+                {
+                    Courses = queryResult.Skip(p.PageSize * p.PageIndex).Take(p.PageSize).ToList(),
+                    RecordCount = queryResult.Count()
+                };
             }
             else
             {
-                return GetCourses().Where(c=>c.CourseName.ToLower().Contains(p.Keyword)).Skip(p.PageSize * p.PageIndex).Take(p.PageSize).ToList();
+                queryResult = queryResult.Where(c => c.CourseName.ToLower().Contains(p.Keyword));
+                return new PaginatedCoursesResultViewModel{
+                    Courses=queryResult.Skip(p.PageSize * p.PageIndex).Take(p.PageSize).ToList(),
+                    RecordCount=queryResult.Count()
+                };
             }
             
         }
